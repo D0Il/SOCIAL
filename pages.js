@@ -444,6 +444,7 @@ window.initLivePage = window.initLivePage || function() {
           window.addDrop = function() { addDrop(); };
           window.syncMusicSidebar = syncMusicSidebar;
 
+          function openEraDetail(e) {
             const t = ERAS[e];
             if (t) {
               window._currentEraId = e, document.getElementById("era-modal-tag").textContent = t.tag || "", document.getElementById(
