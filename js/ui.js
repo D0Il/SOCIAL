@@ -60,57 +60,63 @@ function openCustomBgFromDropdown() {
           c = document.getElementById("nav-theme-toggle"),
           i = document.getElementById("nav-logout-label");
 
-        var _openedAt = 0;
-
         function m() {
-          d && (d.style.display = "none", d.setAttribute("aria-hidden", "true"), s.setAttribute("aria-expanded",
-            "false"), document.removeEventListener("click", a))
+          if (!d) return;
+          d.style.display = "none";
+          d.setAttribute("aria-hidden", "true");
+          s.setAttribute("aria-expanded", "false");
+          document.removeEventListener("pointerdown", a, true);
         }
 
-        function a(t) {
-          if (Date.now() - _openedAt < 200) return; // guard: ignore clicks within 200ms of opening
-          d && (t.target === s || s.contains(t.target) || d.contains(t.target) || m())
+        function a(e) {
+          if (s.contains(e.target) || d.contains(e.target)) return;
+          m();
         }
 
         function openDropdownFromEvent(ev) {
-          try { ev.stopPropagation() } catch (e) {}
+          ev.stopPropagation();
           if (!d) return;
+          if ("block" === d.style.display) { m(); return; }
           try {
-            if ("block" === d.style.display) return void m();
             const rect = s.getBoundingClientRect();
-            d.style.right = window.innerWidth - rect.right + 8 + "px", d.style.top = rect.bottom + 6 + "px", d.style.display =
-              "block", d.setAttribute("aria-hidden", "false"), s.setAttribute("aria-expanded", "true"), c && (c.checked =
-                document.documentElement.classList.contains("light-mode")), i && (i.textContent = document.body.classList
-                .contains("talk-admin") ? "Sign Out" : "Sign In");
+            d.style.right = window.innerWidth - rect.right + 8 + "px";
+            d.style.top = rect.bottom + 6 + "px";
+            d.style.display = "block";
+            d.setAttribute("aria-hidden", "false");
+            s.setAttribute("aria-expanded", "true");
+            c && (c.checked = document.documentElement.classList.contains("light-mode"));
+            i && (i.textContent = document.body.classList.contains("talk-admin") ? "Sign Out" : "Sign In");
             const e = document.getElementById("nav-analytics-btn");
             e && (e.style.display = document.body.classList.contains("talk-admin") ? "flex" : "none");
             const n = document.getElementById("nav-mobile-mode-btn");
             n && (n.style.display = document.body.classList.contains("talk-admin") ? "flex" : "none");
             const o = document.getElementById("nav-moodboard-btn");
             o && (o.style.display = document.body.classList.contains("talk-admin") ? "flex" : "none");
-            _openedAt = Date.now();
-            document.addEventListener("click", a)
+            // Use setTimeout so this pointerdown event finishes propagating before we add the listener
+            setTimeout(function() { document.addEventListener("pointerdown", a, true); }, 0);
           } catch (err) {
-            console.warn("openDropdownFromEvent error", err)
+            console.warn("openDropdownFromEvent error", err);
           }
         }
-        s.addEventListener("click", function(t) {
+
+        // Open on pointerdown so hold = stays open; click just stops propagation
+        s.addEventListener("pointerdown", function(t) {
           t.stopPropagation();
-          openDropdownFromEvent(t)
+          openDropdownFromEvent(t);
         });
-        // Wire mobile hamburger to the same dropdown
+        s.addEventListener("click", function(t) { t.stopPropagation(); });
+
+        // Wire mobile hamburger to same dropdown
         var mob = document.getElementById("mob-settings-btn");
-        if (mob) mob.addEventListener("click", function(t) {
-          t.stopPropagation();
-          openDropdownFromEvent(t)
+        if (mob) {
+          mob.addEventListener("pointerdown", function(t) { t.stopPropagation(); openDropdownFromEvent(t); });
+          mob.addEventListener("click", function(t) { t.stopPropagation(); });
+        }
+
+        c && c.addEventListener("change", function() {
+          try { toggleTheme(this.checked); } catch (t) { console.warn(t); }
         });
-        c.addEventListener("change", function() {
-          try {
-            toggleTheme(this.checked)
-          } catch (t) {
-            console.warn(t)
-          }
-        }), window.addEventListener("resize", m)
+        window.addEventListener("resize", m);
       }()
 
 /* ── Custom background modal (open/submit/preview) ── */

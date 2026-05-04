@@ -1649,7 +1649,10 @@
                       const o = document.getElementById("sl-display-name");
                       o && (o.textContent = S.profile.displayName || "FAME DOLL");
                       const r = document.getElementById("sl-bio");
-                      if (r && (r.textContent = S.profile.bio || ""), S.profile.followerCounts) {
+                      if (r && (r.textContent = S.profile.bio || ""), S.profile.origin !== undefined) {
+                        const ro = document.getElementById("sl-origin");
+                        if (ro && S.profile.origin) ro.innerHTML = S.profile.origin;
+                      } S.profile.followerCounts) {
                         var i = Object.values(S.profile.followerCounts).reduce((e, t) => e + t, 0);
                         const s = document.getElementById("stat-followers");
                         0 < i && s && (s.textContent = formatFans(i))

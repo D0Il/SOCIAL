@@ -33,6 +33,17 @@
         if (typeof updateLatestPostWidget === 'function') updateLatestPostWidget();
         if (typeof applyAllCrops === 'function') applyAllCrops();
         if (typeof wireInstaClickCrop === 'function') wireInstaClickCrop();
+        // Apply profile text fields now that profile.html is in the DOM
+        (function() {
+          var p = window.S && window.S.profile;
+          if (!p) return;
+          var el;
+          el = document.getElementById('sl-realname'); if (el && p.realname) el.textContent = p.realname;
+          el = document.getElementById('sl-origin');   if (el && p.origin)   el.innerHTML  = p.origin;
+          el = document.getElementById('sl-bio');      if (el && p.bio)      el.textContent = p.bio;
+          el = document.getElementById('sl-np-title'); if (el && p.npTitle)  el.textContent = p.npTitle;
+          el = document.getElementById('sl-np-artist');if (el && p.npArtist) el.textContent = p.npArtist;
+        })();
         // Bio block observer — runs here so #sl-bio exists in the DOM
         (function() {
           var e = document.getElementById('sl-bio'),
@@ -410,6 +421,12 @@ window.initLivePage = window.initLivePage || function() {
           function renderAll() {
             renderStreams(), renderEras(), renderDrops()
           }
+
+          // Expose to window so _onPageLoad and tea-party.js can call them
+          window.renderAll = renderAll;
+          window.renderEras = renderEras;
+          window.renderDrops = renderDrops;
+          window.renderStreams = renderStreams;
 
           function openEraDetail(e) {
             const t = ERAS[e];
