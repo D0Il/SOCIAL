@@ -1646,22 +1646,21 @@
                     } else S.profile && S.profile.followerCounts && (n.followerCounts = S.profile.followerCounts);
                     S.profile = Object.assign(S.profile || {}, n);
                     try {
-                      const o = document.getElementById("sl-display-name");
-                      o && (o.textContent = S.profile.displayName || "FAME DOLL");
-                      const r = document.getElementById("sl-bio");
-                      if (r) r.textContent = S.profile.bio || "";
-                      if (S.profile.origin) {
-                        const ro = document.getElementById("sl-origin");
-                        if (ro) ro.innerHTML = S.profile.origin;
-                      }
+                      var _dn = document.getElementById("sl-display-name");
+                      if (_dn) _dn.textContent = S.profile.displayName || "FAME DOLL";
+                      var _bi = document.getElementById("sl-bio");
+                      if (_bi) _bi.textContent = S.profile.bio || "";
+                      var _or = document.getElementById("sl-origin");
+                      if (_or && S.profile.origin) _or.innerHTML = S.profile.origin;
                       if (S.profile.followerCounts) {
-                        var i = Object.values(S.profile.followerCounts).reduce((e, t) => e + t, 0);
-                        const s = document.getElementById("stat-followers");
-                        0 < i && s && (s.textContent = formatFans(i))
+                        var _fc = Object.values(S.profile.followerCounts).reduce(function(a,b){return a+b;},0);
+                        var _sf = document.getElementById("stat-followers");
+                        if (_fc > 0 && _sf) _sf.textContent = formatFans(_fc);
                       }
-                      "function" == typeof updateLevelProgress && updateLevelProgress(), "function" == typeof ensureNowPlayingAudio &&
-                        ensureNowPlayingAudio(), "function" == typeof syncMusicSidebar && syncMusicSidebar()
-                    } catch (e) {}
+                      if (typeof updateLevelProgress==="function") updateLevelProgress();
+                      if (typeof ensureNowPlayingAudio==="function") ensureNowPlayingAudio();
+                      if (typeof syncMusicSidebar==="function") syncMusicSidebar();
+                    } catch(_e) {}
                   }
                   if (e.settings && (S.settings = Object.assign(S.settings || {}, e.settings), "function" == typeof applyAccent &&
                       applyAccent(S.settings.accent), S.settings.customBg ? (document.documentElement.style.backgroundImage =
