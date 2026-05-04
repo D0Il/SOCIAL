@@ -85,7 +85,18 @@ window.FD_CFG = {
   };
 
   window.fdEnsureFirebaseApp = function() {
-    if (window.firebase && !firebase.apps.length) firebase.initializeApp(window.FD_CFG.firebaseConfig);
+    if (window.firebase) {
+      if (!firebase.apps.length) {
+        try {
+          firebase.initializeApp(window.FD_CFG.firebaseConfig);
+        } catch (error) {
+          console.warn("Firebase app initialization failed:", error);
+        }
+      }
+      // Ensure the app is fully initialized
+      return firebase.apps.length > 0;
+    }
+    return false;
   };
 
 var ERAS = {};

@@ -597,6 +597,14 @@
                 min-height: 220px
               }
 
+              /* Mobile: Fix sidebar height to match content instead of full viewport */
+              .mp-sidebar {
+                height: auto !important;
+                min-height: auto !important;
+                position: relative !important;
+                top: auto !important;
+              }
+
               /* Mobile: compact streaming-service row — icon + label pill buttons */
               .mp-sidebar-streams {
                 flex: none !important;

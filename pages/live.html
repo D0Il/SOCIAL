@@ -35,4 +35,17 @@
             </div>
           </div>
         </div>
+        <div class=live-desc-modal-overlay id=live-desc-modal-overlay>
+          <div class=live-desc-modal>
+            <div class=live-desc-modal-head><span class=live-desc-modal-title>Edit Stream Description</span> <button onclick=closeLiveDescEdit() class=live-desc-modal-close>×</button></div>
+            <div
+              class=live-desc-toolbar><button onclick='liveDescExec("bold")' class=live-desc-tb-btn title=Bold><b>B</b></button> <button onclick='liveDescExec("italic")'
+                class=live-desc-tb-btn title=Italic><i>I</i></button> <button onclick=liveDescLink() class=live-desc-tb-btn
+                title=Link>Link</button>
+              <div class=live-desc-tb-sep></div><button onclick=liveDescAddPhoto() class=live-desc-tb-btn title="Upload photo">+ Photo</button></div>
+          <div
+            class=live-desc-editor id=live-desc-editor contenteditable=true spellcheck=true></div>
+        <div class=live-desc-modal-foot><button onclick=closeLiveDescEdit() class=live-desc-cancel-btn>Cancel</button> <button onclick=saveLiveDesc() class=live-desc-save-btn>Save</button></div>
+        </div>
+        </div>
         </div>

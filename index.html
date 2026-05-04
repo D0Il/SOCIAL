@@ -93,20 +93,7 @@
 
 
         <div class=page id=page-live data-page-src="pages/live.html"></div>
-        <div class=live-desc-modal-overlay id=live-desc-modal-overlay>
-          <div class=live-desc-modal>
-            <div class=live-desc-modal-head><span class=live-desc-modal-title>Edit Stream Description</span> <button onclick=closeLiveDescEdit() class=live-desc-modal-close>×</button></div>
-            <div
-              class=live-desc-toolbar><button onclick='liveDescExec("bold")' class=live-desc-tb-btn title=Bold><b>B</b></button> <button onclick='liveDescExec("italic")'
-                class=live-desc-tb-btn title=Italic><i>I</i></button> <button onclick=liveDescLink() class=live-desc-tb-btn
-                title=Link>Link</button>
-              <div class=live-desc-tb-sep></div><button onclick=liveDescAddPhoto() class=live-desc-tb-btn title="Upload photo">+ Photo</button></div>
-          <div
-            class=live-desc-editor id=live-desc-editor contenteditable=true spellcheck=true></div>
-        <div class=live-desc-modal-foot><button onclick=closeLiveDescEdit() class=live-desc-cancel-btn>Cancel</button> <button onclick=saveLiveDesc() class=live-desc-save-btn>Save</button></div>
-        </div>
-        </div>
-        <div class=page id=page-settings data-page-src="pages/settings.html"></div>
+                <div class=page id=page-settings data-page-src="pages/settings.html"></div>
         <div class=modal-bg id=edit-modal onclick=closeEditModal(event)>
           <div style="background:var(--bg);width:min(94vw,580px);max-height:92vh;display:flex;flex-direction:column;border:1px solid rgba(237,232,222,.15);box-shadow:0 40px 100px rgba(0,0,0,.8),0 0 0 1px rgba(237,232,222,.04) inset"
             id=ep-panel>

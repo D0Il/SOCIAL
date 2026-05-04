@@ -884,6 +884,7 @@
           line-height: 1.15 !important;
           display: -webkit-box !important;
           -webkit-line-clamp: 2 !important;
+          line-clamp: 2 !important;
           -webkit-box-orient: vertical !important;
           overflow: hidden !important
         }
@@ -1189,14 +1190,12 @@
                   padding: 0 !important;
                 }
                 #page-scrollables .tiktok-grid {
-                  display: block !important;
                   background: transparent !important;
                 }
                 #page-scrollables .tiktok-embed,
                 #page-scrollables .tiktok-embed blockquote,
                 #page-scrollables .tiktok-embed iframe,
                 #page-scrollables .tiktok-embed section {
-                  display: block !important;
                   width: 100% !important;
                   max-width: 100% !important;
                   min-width: 0 !important;
@@ -1435,8 +1434,6 @@
               }
 
               /* final preview parity layer: keep preview visually identical to real mobile */
-
-              ,
 
               @media(max-width:768px) {
                 /* Keep the Tea Party tabs on one clean row on real mobile screens. */

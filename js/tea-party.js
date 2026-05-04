@@ -1617,8 +1617,37 @@
                 }();
               var e = window.FD_CFG.firebaseSdkBase;
               await window.fdLoadScript(`${e}/firebase-app-compat.js`), await window.fdLoadScript(`${e}/firebase-auth-compat.js`), await window.fdLoadScript(
-                `${e}/firebase-firestore-compat.js`), await window.fdLoadScript(`${e}/firebase-storage-compat.js`), window.fdEnsureFirebaseApp();
-              const i = firebase.firestore();
+                `${e}/firebase-firestore-compat.js`), await window.fdLoadScript(`${e}/firebase-storage-compat.js`);
+              
+              // Ensure Firebase app is properly initialized
+              const firebaseInitialized = window.fdEnsureFirebaseApp();
+              if (!firebaseInitialized) {
+                throw new Error("Failed to initialize Firebase app");
+              }
+              
+              // Wait for Firebase services to be fully available with retry logic
+              let i = null;
+              let retryCount = 0;
+              const maxRetries = 20;
+              while (!i && retryCount < maxRetries) {
+                try {
+                  if (window.firebase && typeof window.firebase.firestore === 'function') {
+                    i = firebase.firestore();
+                    // Test if firestore is actually working
+                    if (i && typeof i.collection === 'function') {
+                      break; // Success!
+                    }
+                  }
+                  throw new Error("Firebase Firestore not ready");
+                } catch (error) {
+                  retryCount++;
+                  if (retryCount >= maxRetries) {
+                    throw new Error(`Failed to initialize Firebase Firestore after ${maxRetries} attempts: ${error.message}`);
+                  }
+                  // Wait a bit before retrying (increasing delay)
+                  await new Promise(resolve => setTimeout(resolve, 50 * retryCount));
+                }
+              }
               window._fbDb_analytics = i;
               const n = firebase.storage(),
                 a = firebase.auth(),
