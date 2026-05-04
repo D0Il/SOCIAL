@@ -23,6 +23,14 @@
   window._onPageLoad = function(pageName) {
     if (_prev) try { _prev(pageName); } catch(e) {}
     switch (pageName) {
+      case 'live':
+        if (typeof _renderLiveDesc === 'function' && window._cachedLiveDesc !== undefined) {
+          _renderLiveDesc(window._cachedLiveDesc);
+        }
+        break;
+      case 'settings':
+        if (typeof renderDeletedGrid === 'function') renderDeletedGrid();
+        break;
       case 'music':
         if (typeof renderAll === 'function') renderAll();
         if (typeof syncMusicSidebar === 'function') syncMusicSidebar();

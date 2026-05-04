@@ -1729,6 +1729,10 @@
                     c && (c.textContent = e.pinned.desc || "—")
                   } catch (e) {}
                   if (void 0 !== e.live_description) _renderLiveDesc(e.live_description);
+                  if (Array.isArray(e.insta_trash)) {
+                    window._instaTrash = e.insta_trash;
+                    if ("function" == typeof renderDeletedGrid) renderDeletedGrid();
+                  }
                   if (e.eras && "object" == typeof e.eras) {
                     ERAS = e.eras;
                     try {

@@ -58,7 +58,7 @@
                 id=nav-custom-bg-btn><svg viewBox="0 0 24 24" height=14 width=14 fill=none stroke=currentColor stroke-width=1.6 style=flex-shrink:0><path d="M3 3h18v4H3z"/><rect height=12 width=18 x=3 y=9 rx=2 /></svg>                Custom Background</button> <button onclick='document.body.classList.contains("talk-admin")?window._talkLogout():login()'
                   style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:4px;border:none;background:0 0;color:var(--ink2);cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;text-transform:uppercase"
                   id=nav-logout-btn><svg viewBox="0 0 24 24" height=14 width=14 fill=none stroke=currentColor stroke-width=1.6 style=flex-shrink:0><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg> <span id=nav-logout-label>Sign In / Out</span></button>                <button onclick=window.openAnalytics() class=admin-only id=nav-analytics-btn style="align-items:center;gap:8px;padding:8px;border-radius:4px;border:none;background:0 0;color:var(--pk);cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;text-transform:uppercase;display:none"><svg viewBox="0 0 24 24" height=14 width=14 fill=none stroke=currentColor stroke-width=1.6 style=flex-shrink:0><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg> Analytics</button>                <button onclick='window.open("https://famedoll.com/life","_blank")' class=admin-only id=nav-moodboard-btn
-                  style="align-items:center;gap:8px;padding:8px;border-radius:4px;border:none;background:0 0;color:var(--pg);cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;text-transform:uppercase;display:none"><svg viewBox="0 0 24 24" height=14 width=14 fill=none stroke=currentColor stroke-width=1.6 style=flex-shrink:0><rect height=5 width=7 x=3 y=3 rx=1 /><rect height=9 width=7 x=14 y=3 rx=1 /><rect height=9 width=7 x=3 y=12 rx=1 /><rect height=5 width=7 x=14 y=16 rx=1 /></svg> Moodboard</button>                <button onclick=window.toggleDragUI() class=admin-only id=nav-drag-ui-btn style="align-items:center;gap:8px;padding:8px;border-radius:4px;border:none;background:0 0;color:var(--dp2);cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;text-transform:uppercase;display:none"><svg viewBox="0 0 24 24" height=14 width=14 fill=none stroke=currentColor stroke-width=1.6 style=flex-shrink:0><path d="M5 9l-3 3 3 3"/><path d="M9 5l3-3 3 3"/><path d="M15 19l-3 3-3-3"/><path d="M19 9l3 3-3 3"/><line x1=2 x2=22 y1=12 y2=12 /><line x1=12 x2=12 y1=2 y2=22 /></svg> <span id=nav-drag-ui-label>Drag UI</span></button></div>
+                  style="align-items:center;gap:8px;padding:8px;border-radius:4px;border:none;background:0 0;color:var(--pg);cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;text-transform:uppercase;display:none"><svg viewBox="0 0 24 24" height=14 width=14 fill=none stroke=currentColor stroke-width=1.6 style=flex-shrink:0><rect height=5 width=7 x=3 y=3 rx=1 /><rect height=9 width=7 x=14 y=3 rx=1 /><rect height=9 width=7 x=3 y=12 rx=1 /><rect height=5 width=7 x=14 y=16 rx=1 /></svg> Moodboard</button></div>
         </div>
         </div>
 
@@ -405,15 +405,7 @@
         </div>
 
 
-        <div id=drag-ui-panel>
-          <h4>⠿ Drag UI Tool</h4>
-          <div class=drag-row><span class=drag-row-label>Avatar</span><span class=drag-coords id=drag-coord-avatar>x:0 y:0 | w:— h:—</span></div>
-          <div
-            class=drag-row><span class=drag-row-label>Panties</span><span class=drag-coords id=drag-coord-panties>x:0 y:0 | w:— h:—</span></div>
-        <div
-          class=drag-row><span class=drag-row-label>Fans Star</span><span class=drag-coords id=drag-coord-star>x:0 y:0 | w:— h:—</span></div>
-          <button
-            onclick=window.copyDragCoords() id=drag-copy-btn>Copy Coords + Sizes</button> <button onclick=window.resetDragCoords() id=drag-reset-btn>Reset All</button></div>
+
 
 
   <!-- ── Application scripts (deferred — parse order matters) ──────────────

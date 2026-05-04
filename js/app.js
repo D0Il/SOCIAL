@@ -471,23 +471,26 @@ const PLAT = {
           }
 
           function _renderLiveDesc(e) {
+            window._cachedLiveDesc = e;
             const t = document.getElementById("live-desc-content"),
               o = document.getElementById("live-desc-placeholder");
-            t && (e && e.trim() ? (t.innerHTML = e, o && (o.style.display = "none")) : (t.innerHTML = "", o && (o.style
-              .display = "")))
+            if (!t) return;
+            e && e.trim() ? (t.innerHTML = e, o && (o.style.display = "none")) : (t.innerHTML = "", o && (o.style.display = ""));
           }
 
           function openLiveDescEdit() {
-            if (document.body.classList.contains("talk-admin")) {
-              const e = document.getElementById("live-desc-editor"),
-                t = document.getElementById("live-desc-content");
-              e && t && (e.innerHTML = t.innerHTML.replace(/<span[^>]*live-desc-empty[^>]*>.*?<\/span>/gi, "")),
-                document.getElementById("live-desc-modal-overlay").classList.add("active"), e && e.focus()
-            }
+            if (!document.body.classList.contains("talk-admin")) return;
+            const overlay = document.getElementById("live-desc-modal-overlay");
+            const e = document.getElementById("live-desc-editor");
+            const t = document.getElementById("live-desc-content");
+            if (e && t) e.innerHTML = t.innerHTML.replace(/<span[^>]*live-desc-empty[^>]*>.*?<\/span>/gi, "");
+            if (overlay) overlay.style.display = "flex";
+            if (e) e.focus();
           }
 
           function closeLiveDescEdit() {
-            document.getElementById("live-desc-modal-overlay").classList.remove("active")
+            const overlay = document.getElementById("live-desc-modal-overlay");
+            if (overlay) overlay.style.display = "none";
           }
 
           function liveDescExec(e) {
@@ -558,7 +561,9 @@ const PLAT = {
             setTimeout(() => {
               o.remove();
               _saveInstaGrid();
-              _showRestoreToast()
+              _showRestoreToast();
+              _saveInstaTrash();
+              if (typeof renderDeletedGrid === 'function') renderDeletedGrid();
             }, 200)
           }
 
@@ -617,6 +622,84 @@ const PLAT = {
             const t = e.closest(".insta-cell");
             t && (t.classList.toggle("is-carousel"), _saveInstaGrid())
           }
+
+          function _saveInstaTrash() {
+            const trash = (window._instaTrash || []).map(function(item) {
+              return { src: item.src, href: item.href, alt: item.alt, title: item.title, carousel: !!item.carousel, html: item.html };
+            });
+            window._saveSiteConfig && window._saveSiteConfig({ insta_trash: trash });
+          }
+
+          function restoreSingleInsta(idx) {
+            const trash = window._instaTrash;
+            if (!trash || !trash[idx]) return;
+            const item = trash.splice(idx, 1)[0];
+            const grid = document.getElementById("grid-gallery");
+            if (grid) {
+              const temp = document.createElement("div");
+              temp.innerHTML = item.html;
+              const cell = temp.firstElementChild;
+              if (cell) {
+                cell.style.opacity = "0";
+                cell.style.transition = "opacity .2s";
+                grid.prepend(cell);
+                requestAnimationFrame(() => { cell.style.opacity = "1"; });
+                _saveInstaGrid();
+              }
+            }
+            _saveInstaTrash();
+            renderDeletedGrid();
+          }
+          window.restoreSingleInsta = restoreSingleInsta;
+
+          function renderDeletedGrid() {
+            const container = document.getElementById("recently-deleted-grid");
+            const empty = document.getElementById("recently-deleted-empty");
+            if (!container) return;
+            const trash = window._instaTrash || [];
+            container.innerHTML = "";
+            if (!trash.length) {
+              container.style.display = "none";
+              if (empty) empty.style.display = "";
+              return;
+            }
+            container.style.display = "grid";
+            if (empty) empty.style.display = "none";
+            trash.forEach(function(item, idx) {
+              const wrap = document.createElement("div");
+              wrap.style.cssText = "position:relative;background:var(--s2);overflow:hidden";
+              const img = document.createElement("img");
+              img.src = item.src;
+              img.style.cssText = "width:100%;height:auto;display:block;opacity:0.7";
+              img.onerror = function() { this.style.opacity = "0.2"; };
+              const btn = document.createElement("button");
+              btn.textContent = "Restore";
+              btn.className = "setting-btn";
+              btn.style.cssText = "position:absolute;bottom:4px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:9px;padding:3px 8px";
+              btn.onclick = function() { restoreSingleInsta(idx); };
+              wrap.appendChild(img);
+              wrap.appendChild(btn);
+              container.appendChild(wrap);
+            });
+          }
+          window.renderDeletedGrid = renderDeletedGrid;
+
+          function addInstaPost(postUrl, imgUrl) {
+            if (!postUrl || !imgUrl) return;
+            const grid = document.getElementById("grid-gallery");
+            if (!grid) { alert("Navigate to the Profile page first."); return; }
+            const shortcode = (postUrl.match(/\/p\/([^/]+)/) || [])[1] || Date.now();
+            const cell = document.createElement("div");
+            cell.className = "insta-cell";
+            cell.title = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+            cell.innerHTML = `<a href="${postUrl}" target="_blank" style="display:block;width:100%"><img src="${imgUrl}" style="width:100%;height:auto;display:block" alt="${shortcode}" onerror='this.closest(".insta-cell").style.opacity="0.2",this.closest(".insta-cell").style.pointerEvents="none"' loading="lazy"></a><button onclick='event.preventDefault(),event.stopPropagation(),deleteInstaCell(this,"${shortcode}")' class="insta-cell-delete" title="Remove">✕</button>`;
+            cell.style.opacity = "0";
+            cell.style.transition = "opacity .25s";
+            grid.prepend(cell);
+            requestAnimationFrame(() => { cell.style.opacity = "1"; });
+            _saveInstaGrid();
+          }
+          window.addInstaPost = addInstaPost;
 
           function _saveInstaGrid() {
             var e = document.querySelectorAll("#grid-gallery .insta-cell"),
@@ -855,12 +938,11 @@ const PLAT = {
               }
             }
           };
-          const liveDescOverlay = document.getElementById("live-desc-modal-overlay");
-          if (liveDescOverlay) {
-            liveDescOverlay.addEventListener("click", function(e) {
-              e.target === this && closeLiveDescEdit()
-            });
-          }
+          // live-desc overlay click-outside — element is lazy-loaded, delegate to document
+          document.addEventListener("click", function(e) {
+            const ov = document.getElementById("live-desc-modal-overlay");
+            if (ov && ov.style.display === "flex" && e.target === ov) closeLiveDescEdit();
+          });
           let _epAvatarData = null;
 
           function openEditModal() {

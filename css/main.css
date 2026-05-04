@@ -3190,33 +3190,35 @@
   }
 
   .insta-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 3px;
+    columns: 5;
+    column-gap: 3px;
     padding: 3px;
     background: rgba(237, 232, 222, .04)
   }
 
   .insta-cell {
-    aspect-ratio: 1;
+    break-inside: avoid;
+    margin-bottom: 3px;
     background: var(--s2);
     overflow: hidden;
     cursor: pointer;
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center
+    display: block
   }
 
-  .insta-cell iframe {
+  .insta-cell > a {
+    display: block !important;
+    position: static !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important
+  }
+
+  .insta-cell img {
     width: 100%;
-    height: 100%;
-    border: none;
-    pointer-events: none
-  }
-
-  .insta-cell:hover iframe {
-    pointer-events: auto
+    height: auto !important;
+    display: block;
+    object-fit: unset !important
   }
 
   .insta-cell .cell-ov {
@@ -4594,11 +4596,6 @@ body:not(.talk-admin) #nav-analytics-btn.admin-only {
             gap: 8px
           }
 
-          body.talk-admin #nav-drag-ui-btn.admin-only {
-            display: flex !important;
-            align-items: center;
-            gap: 8px
-          }
 
 /* ── Scrollables scroll-grid-btn ── */
 #scroll-grid-btn {
