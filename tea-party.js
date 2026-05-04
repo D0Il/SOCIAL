@@ -1632,10 +1632,12 @@
               };
               const r = e => {
                 if (e) {
-                  if (e.crop_positions && (_cropPositions = e.crop_positions), e.crop_saturation && (_cropSaturation =
-                      e.crop_saturation), e.crop_zoom && (_cropZoom = e.crop_zoom), "function" == typeof applyAllCrops &&
-                    applyAllCrops(), void 0 !== e.likes_hidden && document.body.classList.toggle("likes-hidden", !!e.likes_hidden),
-                    e.profile) {
+                  if (e.crop_positions) _cropPositions = e.crop_positions;
+                  if (e.crop_saturation) _cropSaturation = e.crop_saturation;
+                  if (e.crop_zoom) _cropZoom = e.crop_zoom;
+                  if (typeof applyAllCrops === "function") applyAllCrops();
+                  if (void 0 !== e.likes_hidden) document.body.classList.toggle("likes-hidden", !!e.likes_hidden);
+                  if (e.profile) {
                     const n = e.profile;
                     if (n.followerCounts) {
                       var t = S.profile && S.profile.followerCounts || {};
@@ -1697,8 +1699,8 @@
                     const c = document.getElementById("feat-desc-text");
                     c && (c.textContent = e.pinned.desc || "—")
                   } catch (e) {}
-                  if (void 0 !== e.live_description && _renderLiveDesc(e.live_description), e.eras && "object" ==
-                    typeof e.eras) {
+                  if (void 0 !== e.live_description) _renderLiveDesc(e.live_description);
+                  if (e.eras && "object" == typeof e.eras) {
                     ERAS = e.eras;
                     try {
                       localStorage.setItem("fd_eras", JSON.stringify(ERAS))
