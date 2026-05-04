@@ -46,12 +46,13 @@
     }), window._syncDollBg = e
   }()
 
-/* ── Intro sound on first scroll ── */
+/* ── Intro sound on first interaction ── */
 ! function() {
       if (localStorage.getItem("famed0ll_intro_v3")) return;
       function playIntro() {
         localStorage.setItem("famed0ll_intro_v3", "1");
         window.removeEventListener("scroll", playIntro, {passive: true});
+        window.removeEventListener("click", playIntro, {passive: true});
         document.removeEventListener("touchmove", playIntro, {passive: true});
         try {
           var a = new Audio("https://www.dropbox.com/scl/fi/707lbe1u5zvivzqzh4x4d/FAMEEEEEEEEEEEEEEEEEEE.m4a?rlkey=ihm3skhrotb8wto95tnct1imn&st=a7p8uhht&dl=1");
@@ -59,5 +60,6 @@
         } catch(e) {}
       }
       window.addEventListener("scroll", playIntro, {passive: true});
+      window.addEventListener("click", playIntro, {passive: true});
       document.addEventListener("touchmove", playIntro, {passive: true});
     }()
