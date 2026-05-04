@@ -660,8 +660,7 @@
                   font-size: 7px !important
                 }
               }
-
-              /* ensure rules apply in mobile preview mode as well */
+            }
 
 /* ── Live page ── */
 #page-live {
