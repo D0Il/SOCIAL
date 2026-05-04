@@ -458,11 +458,11 @@ window.initLivePage = window.initLivePage || function() {
                   `<a class="era-modal-link" href="${e.url}" target="_blank">${e.label}<span>→</span></a>`
               });
               const s = document.getElementById("era-modal-photo"),
-                r = document.getElementById("era-photo-empty"); /* hide photo area for song/era details — show only links */
+                r = document.getElementById("era-photo-empty");
               if (s) {
-                s.style.display = "none"; /* ensure any leftover images are removed */
+                s.style.display = "";
                 s.querySelectorAll("img").forEach(i => i.remove());
-                r.style.display = "none"
+                if (r) r.style.display = "";
               }
               document.getElementById("era-modal-bg").classList.add("open")
             }
