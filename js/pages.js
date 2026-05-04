@@ -462,7 +462,16 @@ window.initLivePage = window.initLivePage || function() {
               if (s) {
                 s.style.display = "";
                 s.querySelectorAll("img").forEach(i => i.remove());
-                if (r) r.style.display = "";
+                const photoUrl = _eraPhotos[e];
+                if (photoUrl) {
+                  const img = document.createElement("img");
+                  img.src = photoUrl;
+                  img.alt = t.name;
+                  s.insertBefore(img, s.firstChild);
+                  if (r) r.style.display = "none";
+                } else {
+                  if (r) r.style.display = "";
+                }
               }
               document.getElementById("era-modal-bg").classList.add("open")
             }
