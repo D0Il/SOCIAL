@@ -29,7 +29,27 @@
         break;
       case 'profile':
         if (typeof renderGrid === 'function' && window.S && window.S.posts && window.S.posts.gallery && window.S.posts.gallery.length > 0) renderGrid('gallery');
-        if (typeof renderYT === 'function') renderYT();
+        // Add delay and retry logic for YouTube to prevent race condition
+        if (typeof renderYT === 'function') {
+          setTimeout(async () => {
+            let retryCount = 0;
+            const maxRetries = 5;
+            while (retryCount < maxRetries) {
+              try {
+                await renderYT();
+                break; // Success!
+              } catch (error) {
+                retryCount++;
+                if (retryCount >= maxRetries) {
+                  console.warn('YouTube rendering failed after retries:', error);
+                  break;
+                }
+                // Wait before retrying with increasing delay
+                await new Promise(resolve => setTimeout(resolve, 200 * retryCount));
+              }
+            }
+          }, 100); // Small initial delay to ensure DOM is ready
+        }
         if (typeof updateLatestPostWidget === 'function') updateLatestPostWidget();
         if (typeof applyAllCrops === 'function') applyAllCrops();
         if (typeof wireInstaClickCrop === 'function') wireInstaClickCrop();
@@ -44,15 +64,13 @@
           el = document.getElementById('sl-np-title'); if (el && p.npTitle)  el.textContent = p.npTitle;
           el = document.getElementById('sl-np-artist');if (el && p.npArtist) el.textContent = p.npArtist;
         })();
-        // Bio block observer — runs here so #sl-bio exists in the DOM
-        (function() {
-          var e = document.getElementById('sl-bio'),
-              n = e && e.closest('.sl-bio-block');
-          function t() { var txt = (e.textContent || '').trim(); n.style.display = txt && txt !== '...' ? '' : 'none'; }
-          if (e && n) { t(); new MutationObserver(t).observe(e, { childList: true, characterData: true, subtree: true }); }
-        })();
         break;
       case 'scrollables':
+        // Show scroll grid button and ensure thumbnails are loaded
+        const scrollGridBtn = document.getElementById('scroll-grid-btn');
+        if (scrollGridBtn) {
+          scrollGridBtn.style.display = 'flex';
+        }
         // Re-trigger TikTok embed processing after HTML inject
         if (window.tiktokEmbed && typeof window.tiktokEmbed.lib === 'object') {
           try { window.tiktokEmbed.lib.render(document.querySelectorAll('.tiktok-embed:not(.rendered)')); } catch(e) {}
@@ -65,6 +83,16 @@
           s.async = true;
           document.body.appendChild(s);
         }
+        // Trigger thumbnail loading after a short delay to ensure TikTok embeds are ready
+        setTimeout(() => {
+          const thumbGrid = document.getElementById('scroll-thumb-grid');
+          const mainGrid = document.getElementById('scrollables-grid');
+          if (thumbGrid && mainGrid && thumbGrid.children.length === 0) {
+            // Manually trigger thumbnail generation if it didn't run
+            const event = new CustomEvent('scrollables-thumbnails-load');
+            document.dispatchEvent(event);
+          }
+        }, 2000);
         break;
       case 'community':
         // Re-trigger @widgetbot/html-embed after community.html inject
@@ -93,7 +121,30 @@
                       }
                     }()
 
-/* ── Scrollables scroll-grid button ── */
+/* ── Scrollables scroll-grid button ─── */
+
+// Add missing functions for scroll grid functionality
+window.toggleScrollGrid = function() {
+  const overlay = document.getElementById('scroll-grid-overlay');
+  const btn = document.getElementById('scroll-grid-btn');
+  if (overlay) {
+    overlay.style.display = overlay.style.display === 'none' ? 'block' : 'none';
+    if (btn) {
+      btn.style.display = overlay.style.display === 'none' ? 'flex' : 'none';
+    }
+  }
+};
+
+window.closeScrollGrid = function() {
+  const overlay = document.getElementById('scroll-grid-overlay');
+  const btn = document.getElementById('scroll-grid-btn');
+  if (overlay) {
+    overlay.style.display = 'none';
+    if (btn) {
+      btn.style.display = 'flex';
+    }
+  }
+};
 ! function() {
                       const d = document.getElementById("scroll-thumb-grid"),
                         m = document.getElementById("scrollables-grid");
@@ -128,17 +179,54 @@
                             a), r.appendChild(c);
                           var n = `https://p16-sign-va.tiktokcdn.com/obj/tos-useast5-p-0037/${o.vid}.webp`;
                           a.src = n, (async () => {
+                            let retryCount = 0;
+                            const maxRetries = 3;
+                            
                             var e = await async function(e) {
-                              try {
-                                var t = `https://www.tiktok.com/oembed?url=${encodeURIComponent(e)}`;
-                                const o = await fetch(t, {
-                                  cache: "force-cache"
-                                });
-                                if (!o.ok) throw new Error("no oembed");
-                                var n = await o.json();
-                                if (n && n.thumbnail_url) return n.thumbnail_url
-                              } catch (e) {}
-                              return null
+                              for (let attempt = 0; attempt < maxRetries; attempt++) {
+                                try {
+                                  // Try multiple TikTok CDN endpoints
+                                  const endpoints = [
+                                    `https://p16-sign-va.tiktokcdn.com/obj/tos-useast5-p-0037/${o.vid}.webp`,
+                                    `https://p16-sign-va.tiktokcdn.com/obj/tos-useast2a-p-0037/${o.vid}.webp`,
+                                    `https://p16-sign-va.tiktokcdn.com/obj/tos-useast1a-p-0037/${o.vid}.webp`
+                                  ];
+                                  
+                                  // Try direct CDN first
+                                  for (const endpoint of endpoints) {
+                                    try {
+                                      const testImg = new Image();
+                                      await new Promise((resolve, reject) => {
+                                        testImg.onload = resolve;
+                                        testImg.onerror = reject;
+                                        testImg.src = endpoint;
+                                        setTimeout(() => reject(new Error('timeout')), 3000);
+                                      });
+                                      return endpoint;
+                                    } catch (e) {
+                                      continue; // Try next endpoint
+                                    }
+                                  }
+                                  
+                                  // Fallback to oEmbed API
+                                  var t = `https://www.tiktok.com/oembed?url=${encodeURIComponent(e)}`;
+                                  const o = await fetch(t, {
+                                    cache: "force-cache",
+                                    headers: {
+                                      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                                    }
+                                  });
+                                  if (!o.ok) throw new Error("no oembed");
+                                  var n = await o.json();
+                                  if (n && n.thumbnail_url) return n.thumbnail_url
+                                } catch (e) {
+                                  console.warn(`Thumbnail fetch attempt ${attempt + 1} failed:`, e.message);
+                                  if (attempt < maxRetries - 1) {
+                                    await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1))); // Exponential backoff
+                                  }
+                                }
+                              }
+                              return null;
                             }(o.url);
                             e && a.src !== e && (a.src = e)
                           })(), a.addEventListener("error", () => {

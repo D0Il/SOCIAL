@@ -1661,9 +1661,9 @@
               };
               const r = e => {
                 if (e) {
-                  if (e.crop_positions) _cropPositions = e.crop_positions;
-                  if (e.crop_saturation) _cropSaturation = e.crop_saturation;
-                  if (e.crop_zoom) _cropZoom = e.crop_zoom;
+                  if (e.crop_positions) window._cropPositions = e.crop_positions;
+                  if (e.crop_saturation) window._cropSaturation = e.crop_saturation;
+                  if (e.crop_zoom) window._cropZoom = e.crop_zoom;
                   if (typeof applyAllCrops === "function") applyAllCrops();
                   if (void 0 !== e.likes_hidden) document.body.classList.toggle("likes-hidden", !!e.likes_hidden);
                   if (e.profile) {
@@ -1773,9 +1773,9 @@
                     const n = {
                       profile: S.profile,
                       settings: S.settings,
-                      crop_positions: _cropPositions,
-                      crop_saturation: _cropSaturation,
-                      crop_zoom: _cropZoom,
+                      crop_positions: window._cropPositions,
+                      crop_saturation: window._cropSaturation,
+                      crop_zoom: window._cropZoom,
                       likes_hidden: "true" === localStorage.getItem("fd_likes_hidden")
                     };
                     var t = JSON.parse(localStorage.getItem("famed0ll_pinned") || "null");

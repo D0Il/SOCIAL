@@ -727,6 +727,30 @@ const PLAT = {
               o && "object" == typeof o && (S.profile = Object.assign(S.profile, o), window.ensureProfileDefaults(S.profile), S.profile.avatar && document.getElementById("sl-avatar-inner") && (document.getElementById("sl-avatar-inner").innerHTML =
                   `<img src="${S.profile.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
                 ))
+              
+              // Initialize fans count after profile data is loaded
+              if (S.profile.followerCounts) {
+                const t = Object.values(S.profile.followerCounts).reduce((e, t) => e + t, 0);
+                const s = document.getElementById("stat-followers");
+                s && (s.textContent = 0 < t ? formatFans(t) : "—");
+                
+                // Initialize fans modal display values
+                const e = ["tiktok", "instagram", "youtube", "spotify", "twitch"];
+                e.forEach(e => {
+                  var t = S.profile.followerCounts[e] && 0 < S.profile.followerCounts[e] ? S.profile.followerCounts[e] : 0;
+                  const o = document.getElementById("fans-" + e);
+                  o && (o.textContent = 0 < t ? formatFans(t) : "—");
+                  const n = document.getElementById("fans-input-" + e);
+                  n && (n.value = 0 < t ? t : "");
+                  const i = document.getElementById("ep-followers-" + e);
+                  i && (i.value = 0 < t ? t : "");
+                });
+                const o = document.getElementById("fans-modal-total");
+                o && (o.textContent = 0 < t ? formatFans(t) : "—");
+              }
+              
+              // Update level progress after profile data is loaded (this includes "days to next")
+              updateLevelProgress();
             } catch (e) {
               console.warn("Failed to load saved state", e)
             }
@@ -762,11 +786,7 @@ const PLAT = {
               var _na = _g("sl-np-artist");if (_na) _na.textContent = S.profile.npArtist || _na.textContent;
             })();
             S.profile.displayName;
-            if (updateLevelProgress(), updatePostCount(), S.profile.followerCounts) {
-              t = Object.values(S.profile.followerCounts).reduce((e, t) => e + t, 0);
-              const s = document.getElementById("stat-followers");
-              0 < t && s && (s.textContent = formatFans(t))
-            }
+            updatePostCount();
             // renderYT() called by _onPageLoad after profile.html injects
             try {
               const d = JSON.parse(localStorage.getItem("famed0ll_pinned") || "null");
@@ -835,9 +855,12 @@ const PLAT = {
               }
             }
           };
-          document.getElementById("live-desc-modal-overlay").addEventListener("click", function(e) {
-            e.target === this && closeLiveDescEdit()
-          });
+          const liveDescOverlay = document.getElementById("live-desc-modal-overlay");
+          if (liveDescOverlay) {
+            liveDescOverlay.addEventListener("click", function(e) {
+              e.target === this && closeLiveDescEdit()
+            });
+          }
           let _epAvatarData = null;
 
           function openEditModal() {
@@ -1210,18 +1233,25 @@ const PLAT = {
             } else t && (t.style.display = "flex")
           }
           async function renderYT() {
-            const e = document.getElementById("yt-list"),
-              t = document.getElementById("yt-list-side");
+            try {
+              // Ensure required elements exist
+              const e = document.getElementById("yt-list"),
+                t = document.getElementById("yt-list-side");
+              
+              if (!e && !t) {
+                console.warn('YouTube list elements not found, skipping renderYT');
+                return;
+              }
 
-            function o(e) {
-              if (!e) return null;
-              var t = e.querySelector(".yt-empty");
-              return e.querySelectorAll(".yt-item").forEach(e => e.remove()), t
-            }
-            const n = o(e),
-              l = o(t),
-              a = S.posts.cinema || [],
-              i = a.slice().sort((e, t) => t.id - e.id);
+              function o(e) {
+                if (!e) return null;
+                var t = e.querySelector(".yt-empty");
+                return e.querySelectorAll(".yt-item").forEach(e => e.remove()), t
+              }
+              const n = o(e),
+                l = o(t),
+                a = S.posts.cinema || [],
+                i = a.slice().sort((e, t) => t.id - e.id);
             if (i.length) {
               n && (n.style.display = "none"), l && (l.style.display = "none");
               for (const u of i)
@@ -1339,6 +1369,10 @@ const PLAT = {
               const m = document.getElementById("feat-yt-list");
               m && m.querySelectorAll(".feat-yt-item").forEach(e => e.remove())
             }
+            } catch (error) {
+              console.error('Error in renderYT:', error);
+              throw error; // Re-throw to allow retry logic in pages.js
+            }
           }
 
           function recalcFans() {
@@ -1445,49 +1479,49 @@ const PLAT = {
             e = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(e);
             return e ? `${parseInt(e[1],16)},${parseInt(e[2],16)},${parseInt(e[3],16)}` : "255,255,255"
           }
-          let _cropPositions = {},
-            _cropSaturation = {},
-            _cropZoom = {};
+          window._cropPositions = {},
+            window._cropSaturation = {},
+            window._cropZoom = {};
           try {
-            _cropPositions = JSON.parse(localStorage.getItem("fd_crop_positions") || "{}")
+            window._cropPositions = JSON.parse(localStorage.getItem("fd_crop_positions") || "{}")
           } catch (e) {}
           try {
-            _cropSaturation = JSON.parse(localStorage.getItem("fd_crop_saturation") || "{}")
+            window._cropSaturation = JSON.parse(localStorage.getItem("fd_crop_saturation") || "{}")
           } catch (e) {}
           try {
-            _cropZoom = JSON.parse(localStorage.getItem("fd_crop_zoom") || "{}")
+            window._cropZoom = JSON.parse(localStorage.getItem("fd_crop_zoom") || "{}")
           } catch (e) {}
           let _cropChanged = !1;
 
           function saveCropPositions() {
             try {
-              localStorage.setItem("fd_crop_positions", JSON.stringify(_cropPositions))
+              localStorage.setItem("fd_crop_positions", JSON.stringify(window._cropPositions))
             } catch (e) {}
             window._saveSiteConfig && window._saveSiteConfig({
-              crop_positions: _cropPositions
+              crop_positions: window._cropPositions
             })
           }
 
           function saveCropSaturation() {
             try {
-              localStorage.setItem("fd_crop_saturation", JSON.stringify(_cropSaturation))
+              localStorage.setItem("fd_crop_saturation", JSON.stringify(window._cropSaturation))
             } catch (e) {}
             window._saveSiteConfig && window._saveSiteConfig({
-              crop_saturation: _cropSaturation
+              crop_saturation: window._cropSaturation
             })
           }
 
           function saveCropZoom() {
             try {
-              localStorage.setItem("fd_crop_zoom", JSON.stringify(_cropZoom))
+              localStorage.setItem("fd_crop_zoom", JSON.stringify(window._cropZoom))
             } catch (e) {}
             window._saveSiteConfig && window._saveSiteConfig({
-              crop_zoom: _cropZoom
+              crop_zoom: window._cropZoom
             })
           }
 
           function applyImgFilter(e, t) {
-            t = void 0 !== _cropSaturation[t] ? _cropSaturation[t] : 100, t = t < 100 ? `saturate(${t}%)` : "";
+            t = void 0 !== window._cropSaturation[t] ? window._cropSaturation[t] : 100, t = t < 100 ? `saturate(${t}%)` : "";
             e.style.filter = t;
             const o = e.closest(".insta-cell");
             o && o.style.backgroundImage && (o.style.filter = t)
@@ -1496,7 +1530,7 @@ const PLAT = {
           function applyCropToImg(e, t) {
             const o = e.closest(".insta-cell");
             var n;
-            o && (n = _cropZoom[t] || 1, t = _cropPositions[t] || {
+            o && (n = window._cropZoom[t] || 1, t = window._cropPositions[t] || {
                 x: 50,
                 y: 50
               }, o.style.backgroundImage = `url('${e.src}')`, o.style.backgroundSize = n <= 1 ? "cover" : `${100*n}%`,
@@ -1508,19 +1542,18 @@ const PLAT = {
             document.querySelectorAll(".insta-cell").forEach(e => {
               var t = e.querySelector("img"),
                 e = t?.alt;
-              e && (applyImgFilter(t, e), _cropPositions[e] && "object" == typeof _cropPositions[e] && _cropZoom[e] ?
-                applyCropToImg(t, e) : _cropPositions[e] && "string" == typeof _cropPositions[e] && delete _cropPositions[
-                  e])
+              e && (applyImgFilter(t, e), window._cropPositions[e] && "object" == typeof window._cropPositions[e] && window._cropZoom[e] ?
+                applyCropToImg(t, e) : window._cropPositions[e] && "string" == typeof window._cropPositions[e] && delete window._cropPositions[e])
             })
           }
 
           function openCropPicker(o, n) {
             document.querySelector(".crop-picker-popup")?.remove();
-            const l = _cropPositions[o] || {
+            const l = window._cropPositions[o] || {
               x: 50,
               y: 50
             };
-            let a = _cropZoom[o] || 1,
+            let a = window._cropZoom[o] || 1,
               i = 0,
               s = 0;
             const d = document.createElement("div");
@@ -1607,8 +1640,8 @@ const PLAT = {
               a = e / 100, y()
             });
             e.appendChild(E);
-            var S = S("Saturation", 0, 100, void 0 !== _cropSaturation[o] ? _cropSaturation[o] : 100, 1, e => {
-              _cropSaturation[o] = e, saveCropSaturation(), applyImgFilter(n, o), m.style.filter = e < 100 ?
+            var S = S("Saturation", 0, 100, void 0 !== window._cropSaturation[o] ? window._cropSaturation[o] : 100, 1, e => {
+              window._cropSaturation[o] = e, saveCropSaturation(), applyImgFilter(n, o), m.style.filter = e < 100 ?
                 `saturate(${e}%)` : ""
             })["row"];
             e.appendChild(S);
@@ -1628,10 +1661,10 @@ const PLAT = {
                   t = Math.max(1, t - 300),
                   e = Math.max(0, Math.min(100, Math.round(i / e * 100))),
                   t = Math.max(0, Math.min(100, Math.round(s / t * 100)));
-                _cropPositions[o] = {
-                  x: e,
-                  y: t
-                }, _cropZoom[o] = a, saveCropPositions(), saveCropZoom(), applyCropToImg(n, o), d.remove()
+                window._cropPositions[o] = {
+                  x: i,
+                  y: s
+                }, window._cropZoom[o] = a, saveCropPositions(), saveCropZoom(), applyCropToImg(n, o), d.remove()
               }, e.appendChild(B), d.appendChild(e), document.body.appendChild(d), d.onclick = () => d.remove(), e.querySelector(
                 "#crop-close-btn").onclick = () => d.remove()
           }
@@ -1672,8 +1705,8 @@ const PLAT = {
               }
             }
           }
-          Object.keys(_cropPositions).forEach(e => {
-              "string" == typeof _cropPositions[e] && (delete _cropPositions[e], _cropChanged = !0)
+          Object.keys(window._cropPositions).forEach(e => {
+              "string" == typeof window._cropPositions[e] && (delete window._cropPositions[e], _cropChanged = !0)
             }), _cropChanged && saveCropPositions(), applyAllCrops(), wireInstaClickCrop(), window.updateLatestPostWidget = updateLatestPostWidget, window._updateLatestPostWidget =
             updateLatestPostWidget, window.FameDoll = {
               setProfile(e = {}) {
@@ -1820,7 +1853,7 @@ const PLAT = {
           var _origShowPageForYT = window.showPage;
           window.showPage = function(p) {
             var r = _origShowPageForYT(p);
-            if (p === "music" && !window._ytSubFetchDone) {
+            if ((p === "music" || p === "profile") && !window._ytSubFetchDone) {
               window._ytSubFetchDone = !0;
               setTimeout(fetchYTSubCount, 300)
             }
