@@ -51,143 +51,150 @@ window._initScrollThumbs = function () {
   ].filter(Boolean);
   if (!targets.length) return;
 
-  var embeds = Array.from(mainGrid.querySelectorAll('.tiktok-embed'));
-  var items = embeds
-    .map(function (el) {
-      var cite = el.getAttribute('cite') || '';
-      var captionEl = el.querySelector('section p');
-      var caption = captionEl ? captionEl.textContent.trim() : '';
-      var userEl = el.querySelector('section a');
-      var user = userEl ? userEl.textContent.replace(/^@/, '') : '';
-      var vid = el.dataset.videoId || cite.split('/').filter(Boolean).pop() || '';
-      return { url: cite, caption: caption, user: user, vid: vid };
-    })
-    .filter(function (item) { return item.url; });
+  clearTimeout(window._scrollThumbRenderTimer);
+  window._scrollThumbRenderTimer = setTimeout(function () {
+    var embeds = Array.from(mainGrid.querySelectorAll('.tiktok-embed'));
+    var seen = {};
+    var items = embeds
+      .map(function (el) {
+        var cite = el.getAttribute('cite') || '';
+        var captionEl = el.querySelector('section p');
+        var caption = captionEl ? captionEl.textContent.trim() : '';
+        var userEl = el.querySelector('section a');
+        var user = userEl ? userEl.textContent.replace(/^@/, '') : '';
+        var vid = el.dataset.videoId || cite.split('/').filter(Boolean).pop() || '';
+        return { url: cite, caption: caption, user: user, vid: vid };
+      })
+      .filter(function (item) {
+        if (!item.url || seen[item.url]) return false;
+        seen[item.url] = true;
+        return true;
+      });
 
-  function setFallback(wrapEl, imgEl, ovEl, itemData) {
-    if (!imgEl || !imgEl.parentNode) return;
-    var fallback = document.createElement('div');
-    fallback.style.cssText =
-      'width:100%;height:100%;display:flex;align-items:center;justify-content:center;' +
-      'background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0));' +
-      'color:var(--ink3);font-family:DM Mono,monospace;font-size:12px;';
-    fallback.textContent = itemData.user ? itemData.user.slice(0, 2).toUpperCase() : 'TK';
-    imgEl.remove();
-    wrapEl.insertBefore(fallback, ovEl);
-  }
-
-  function loadImage(imgEl, url) {
-    return new Promise(function (resolve, reject) {
-      var done = false;
-      var timer = setTimeout(function () {
-        if (done) return;
-        done = true;
-        reject(new Error('timeout'));
-      }, 4500);
-      imgEl.onload = function () {
-        if (done) return;
-        done = true;
-        clearTimeout(timer);
-        resolve(url);
-      };
-      imgEl.onerror = function () {
-        if (done) return;
-        done = true;
-        clearTimeout(timer);
-        reject(new Error('image failed'));
-      };
-      imgEl.src = url;
-    });
-  }
-
-  async function resolveThumbUrl(itemData) {
-    try {
-      var resp = await fetch(
-        'https://www.tiktok.com/oembed?url=' + encodeURIComponent(itemData.url),
-        { cache: 'force-cache' },
-      );
-      if (resp.ok) {
-        var data = await resp.json();
-        if (data && data.thumbnail_url) return data.thumbnail_url;
-      }
-    } catch (e) {}
-
-    return null;
-  }
-
-  function makeThumb(item) {
-    var wrapper = document.createElement('a');
-    wrapper.className = 'scroll-thumb';
-    wrapper.href = item.url;
-    wrapper.target = '_blank';
-    wrapper.rel = 'noopener noreferrer';
-    wrapper.setAttribute('role', 'listitem');
-
-    var img = document.createElement('img');
-    img.alt = item.caption || item.user || 'TikTok';
-    img.loading = 'lazy';
-
-    var ov = document.createElement('div');
-    ov.className = 'st-overlay';
-    var userDiv = document.createElement('div');
-    userDiv.className = 'st-user';
-    userDiv.textContent = item.user || '';
-    var playDiv = document.createElement('div');
-    playDiv.className = 'st-play';
-    playDiv.textContent = 'Open';
-    ov.appendChild(userDiv);
-    ov.appendChild(playDiv);
-    wrapper.appendChild(img);
-    wrapper.appendChild(ov);
-
-    wrapper.addEventListener('click', function () {
-      wrapper.classList.add('clicked');
-      setTimeout(function () { wrapper.classList.remove('clicked'); }, 400);
-    });
-
-    resolveThumbUrl(item).then(function (url) {
-      var candidates = [];
-      if (url) candidates.push(url);
-      if (item.vid) {
-        candidates.push(
-          'https://p16-sign-va.tiktokcdn.com/obj/tos-useast5-p-0037/' + item.vid + '.webp',
-          'https://p16-sign-va.tiktokcdn.com/obj/tos-useast2a-p-0037/' + item.vid + '.webp',
-          'https://p16-sign-va.tiktokcdn.com/obj/tos-useast1a-p-0037/' + item.vid + '.webp',
-        );
-      }
-
-      function tryCandidate(index) {
-        if (index >= candidates.length) {
-          setFallback(wrapper, img, ov, item);
-          return;
-        }
-        loadImage(img, candidates[index]).catch(function () {
-          tryCandidate(index + 1);
-        });
-      }
-      tryCandidate(0);
-    });
-
-    return wrapper;
-  }
-
-  targets.forEach(function (target) {
-    target.classList.add('scroll-thumb-grid');
-    target.innerHTML = '';
-
-    if (!items.length) {
-      var empty = document.createElement('div');
-      empty.style.cssText =
-        'color:var(--ink3);font-family:DM Mono,monospace;font-size:12px;padding:8px;';
-      empty.textContent = 'No scrollables found - add TikTok links to populate thumbnails.';
-      target.appendChild(empty);
-      return;
+    function setFallback(wrapEl, imgEl, ovEl, itemData) {
+      if (!imgEl || !imgEl.parentNode) return;
+      var fallback = document.createElement('div');
+      fallback.style.cssText =
+        'width:100%;height:100%;display:flex;align-items:center;justify-content:center;' +
+        'background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0));' +
+        'color:var(--ink3);font-family:DM Mono,monospace;font-size:12px;';
+      fallback.textContent = itemData.user ? itemData.user.slice(0, 2).toUpperCase() : 'TK';
+      imgEl.remove();
+      wrapEl.insertBefore(fallback, ovEl);
     }
 
-    items.forEach(function (item) {
-      target.appendChild(makeThumb(item));
+    function loadImage(imgEl, url) {
+      return new Promise(function (resolve, reject) {
+        var done = false;
+        var timer = setTimeout(function () {
+          if (done) return;
+          done = true;
+          reject(new Error('timeout'));
+        }, 4500);
+        imgEl.onload = function () {
+          if (done) return;
+          done = true;
+          clearTimeout(timer);
+          resolve(url);
+        };
+        imgEl.onerror = function () {
+          if (done) return;
+          done = true;
+          clearTimeout(timer);
+          reject(new Error('image failed'));
+        };
+        imgEl.src = url;
+      });
+    }
+
+    async function resolveThumbUrl(itemData) {
+      try {
+        var resp = await fetch(
+          'https://www.tiktok.com/oembed?url=' + encodeURIComponent(itemData.url),
+          { cache: 'force-cache' },
+        );
+        if (resp.ok) {
+          var data = await resp.json();
+          if (data && data.thumbnail_url) return data.thumbnail_url;
+        }
+      } catch (e) {}
+      return null;
+    }
+
+    function makeThumb(item) {
+      var wrapper = document.createElement('a');
+      wrapper.className = 'scroll-thumb';
+      wrapper.href = item.url;
+      wrapper.target = '_blank';
+      wrapper.rel = 'noopener noreferrer';
+      wrapper.setAttribute('role', 'listitem');
+
+      var img = document.createElement('img');
+      img.alt = item.caption || item.user || 'TikTok';
+      img.loading = 'lazy';
+
+      var ov = document.createElement('div');
+      ov.className = 'st-overlay';
+      var userDiv = document.createElement('div');
+      userDiv.className = 'st-user';
+      userDiv.textContent = item.user || '';
+      var playDiv = document.createElement('div');
+      playDiv.className = 'st-play';
+      playDiv.textContent = 'Open';
+      ov.appendChild(userDiv);
+      ov.appendChild(playDiv);
+      wrapper.appendChild(img);
+      wrapper.appendChild(ov);
+
+      wrapper.addEventListener('click', function () {
+        wrapper.classList.add('clicked');
+        setTimeout(function () { wrapper.classList.remove('clicked'); }, 400);
+      });
+
+      resolveThumbUrl(item).then(function (url) {
+        var candidates = [];
+        if (url) candidates.push(url);
+        if (item.vid) {
+          candidates.push(
+            'https://p16-sign-va.tiktokcdn.com/obj/tos-useast5-p-0037/' + item.vid + '.webp',
+            'https://p16-sign-va.tiktokcdn.com/obj/tos-useast2a-p-0037/' + item.vid + '.webp',
+            'https://p16-sign-va.tiktokcdn.com/obj/tos-useast1a-p-0037/' + item.vid + '.webp',
+          );
+        }
+
+        function tryCandidate(index) {
+          if (index >= candidates.length) {
+            setFallback(wrapper, img, ov, item);
+            return;
+          }
+          loadImage(img, candidates[index]).catch(function () {
+            tryCandidate(index + 1);
+          });
+        }
+        tryCandidate(0);
+      });
+
+      return wrapper;
+    }
+
+    targets.forEach(function (target) {
+      target.classList.add('scroll-thumb-grid');
+      target.innerHTML = '';
+
+      if (!items.length) {
+        var empty = document.createElement('div');
+        empty.style.cssText =
+          'color:var(--ink3);font-family:DM Mono,monospace;font-size:12px;padding:8px;';
+        empty.textContent = 'No scrollables found - add TikTok links to populate thumbnails.';
+        target.appendChild(empty);
+        return;
+      }
+
+      items.forEach(function (item) {
+        target.appendChild(makeThumb(item));
+      });
     });
-  });
+  }, 260);
 };
 /* Refresh TikTok embeds after the Scrollables page is visible on mobile. */
 window._refreshScrollEmbeds = function () {

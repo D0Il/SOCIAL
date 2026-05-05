@@ -4869,3 +4869,20 @@ body:not(.talk-admin) #nav-addpost-btn {
                 margin-top: 0 !important;
                 align-self: stretch !important;
               }
+/* Scrollables feed: TikTok cards should touch edge-to-edge vertically */
+#page-scrollables #scrollables-grid,
+#page-scrollables .tiktok-grid {
+  display: block !important;
+  gap: 0 !important;
+  row-gap: 0 !important;
+  line-height: 0 !important;
+}
+
+#page-scrollables .tiktok-embed,
+#page-scrollables .tiktok-embed iframe,
+#page-scrollables .tiktok-embed section {
+  display: block !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  vertical-align: top !important;
+}

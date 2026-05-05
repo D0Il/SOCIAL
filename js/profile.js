@@ -1862,7 +1862,7 @@ function updateLatestPostWidget(posts) {
     titleEl.style.webkitBoxOrient = '';
     var titleLine = document.createElement('div');
     titleLine.textContent = latestTitle;
-    titleLine.style.cssText = "font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--ink);font-weight:700;line-height:1.3;margin-bottom:4px;";
+    titleLine.style.cssText = "font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink);font-weight:800;line-height:1.35;margin-bottom:5px;";
     var textLine = document.createElement('div');
     textLine.textContent = latestText || 'No preview text yet.';
     textLine.style.cssText = "font-family:'Cormorant Garamond',serif;font-size:13px;line-height:1.45;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;";
