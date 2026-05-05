@@ -55,7 +55,7 @@
         window.removeEventListener("click", playIntro, {passive: true});
         document.removeEventListener("touchmove", playIntro, {passive: true});
         try {
-          var a = new Audio("https://www.dropbox.com/scl/fi/707lbe1u5zvivzqzh4x4d/FAMEEEEEEEEEEEEEEEEEEE.m4a?rlkey=ihm3skhrotb8wto95tnct1imn&st=a7p8uhht&dl=1");
+          var a = new Audio("assets/audio/fame-intro.m4a");
           a.volume = .9; a.play().catch(function() {});
         } catch(e) {}
       }

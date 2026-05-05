@@ -828,7 +828,7 @@
             username: 'guest',
             id: 'guest',
           },
-          c = (P && P.avatarUrl) || 'https://i.imgur.com/Z8rhYYS.jpeg',
+          c = (P && P.avatarUrl) || 'assets/images/web-profile-pic.jpg',
           d = (P && P.nickname) || d.username;
         (e && (e.style.backgroundImage = `url('${c}')`),
           t && ((t.textContent = d), (t.title = '')));
@@ -846,7 +846,7 @@
             n &&
               ((e = P.avatarUrl || window.FD_CFG.defaultProfile.avatar),
               (n.style.backgroundImage = `url('${e}')`)),
-            a && ((e = P.bannerUrl || c), (a.style.backgroundImage = `url('${e}')`)));
+            a && ((e = P.bannerUrl || 'assets/images/tea-party-banner.png'), (a.style.backgroundImage = `url('${e}')`)));
         }
       }
 
@@ -978,8 +978,8 @@
                 n &&
                   a &&
                   ((o = (i && i.nickname) || t),
-                  (r = (i && i.avatarUrl) || 'https://i.imgur.com/ct2ERKN.jpeg'),
-                  (s = (i && i.bannerUrl) || c),
+                  (r = (i && i.avatarUrl) || 'assets/images/web-profile-pic.jpg'),
+                  (s = (i && i.bannerUrl) || 'assets/images/tea-party-banner.png'),
                   (l = (i && i.bio && i.bio.trim()) || ''),
                   (n.innerHTML = `
     <div class="user-profile-header">
@@ -1368,7 +1368,7 @@
           Object.values(M).find((e) => e.username && e.username.toLowerCase() === t.toLowerCase());
         return {
           nickname: (e && e.nickname) || t,
-          avatar: e && e.avatarUrl ? e.avatarUrl : 'https://i.imgur.com/ct2ERKN.jpeg',
+          avatar: e && e.avatarUrl ? e.avatarUrl : 'assets/images/web-profile-pic.jpg',
         };
       }
 
@@ -1509,7 +1509,7 @@
         var d = o.username || 'unknown',
           c = M[d],
           u = (c && c.nickname) || d,
-          m = (c && c.avatarUrl) || 'https://i.imgur.com/ct2ERKN.jpeg',
+          m = (c && c.avatarUrl) || 'assets/images/web-profile-pic.jpg',
           p = t.created_at,
           g = p ? dayjs(p).fromNow() : '';
         let f = ye(he(o.text || ''));
@@ -2418,12 +2418,12 @@
                 ></textarea>
               </div>
               <!-- imgur URL input -->
-              <div id="imgur-url-wrapper" style="padding:0 0 6px 0;display:none;">
+              <div id="imgur-url-wrapper" class="image-link-prompt" style="padding:0 0 6px 0;display:none;">
                 <input id="imgur-url-input" type="url" placeholder="https://i.imgur.com/abc123.jpg" style="width:100%;padding:6px 10px;background:var(--s2);border:1px solid var(--border2);color:var(--ink);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.5px;border-radius:2px;box-sizing:border-box;" />
               </div>
               <div class="update-footer">
                 <div style="display:flex;align-items:center;gap:8px;">
-                  <button type="button" id="imgur-toggle-btn" style="background:none;border:1px solid var(--border2);color:var(--ink3);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;cursor:pointer;border-radius:2px;transition:border-color .15s,color .15s;" onclick="(function(){const w=document.getElementById('imgur-url-wrapper');const on=w.style.display==='none';w.style.display=on?'block':'none';document.getElementById('imgur-toggle-btn').style.borderColor=on?'var(--pk)':'var(--border2)';document.getElementById('imgur-toggle-btn').style.color=on?'var(--pk)':'var(--ink3)';if(!on)document.getElementById('imgur-url-input').value='';})()">🖼 Imgur URL</button>
+                  <label class="update-image-label image-upload-prompt"><span class="update-image-placeholder">+</span><span>${X('addMedia')}</span><input type="file" accept="image/*,video/*,audio/*" id="update-image-input" class="update-image-input" /></label><button type="button" id="imgur-toggle-btn" class="image-link-prompt" style="background:none;border:1px solid var(--border2);color:var(--ink3);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;cursor:pointer;border-radius:2px;transition:border-color .15s,color .15s;" onclick="(function(){const w=document.getElementById('imgur-url-wrapper');const on=w.style.display==='none';w.style.display=on?'block':'none';document.getElementById('imgur-toggle-btn').style.borderColor=on?'var(--pk)':'var(--border2)';document.getElementById('imgur-toggle-btn').style.color=on?'var(--pk)':'var(--ink3)';if(!on)document.getElementById('imgur-url-input').value='';})()">🖼 Imgur URL</button>
                   <span class="update-selected-image" id="selected-image-name"></span>
                 </div>
                 <div class="update-actions">
@@ -2456,15 +2456,15 @@
                 <label>${X('profilePic')}</label>
                 <div class="profile-avatar-edit-container">
                   <div class="profile-avatar-preview" id="profile-avatar-preview"></div>
-                  <input type="file" id="profile-avatar-input" accept="image/*" />
+                  <input type="file" id="profile-avatar-input" class="image-upload-prompt" accept="image/*" />
                 </div>
-                <input type="text" id="profile-avatar-url-input" placeholder="Or paste image URL (imgur, etc.)" style="margin-top:6px;width:100%;padding:6px 8px;border:1px solid var(--border2);background:var(--s2);color:var(--ink);font-size:11px;font-family:DM Mono,monospace;border-radius:2px;" />
+                <input type="text" id="profile-avatar-url-input" class="image-link-prompt" placeholder="Paste image URL" style="margin-top:6px;width:100%;padding:6px 8px;border:1px solid var(--border2);background:var(--s2);color:var(--ink);font-size:11px;font-family:DM Mono,monospace;border-radius:2px;" />
               </div>
               <div class="profile-form-group">
                 <label>${X('profileBanner')}</label>
                 <div class="profile-banner-preview" id="profile-banner-preview"></div>
-                <input type="file" id="profile-banner-input" accept="image/*" />
-                <input type="text" id="profile-banner-url-input" placeholder="Or paste banner URL (imgur, etc.)" style="margin-top:6px;width:100%;padding:6px 8px;border:1px solid var(--border2);background:var(--s2);color:var(--ink);font-size:11px;font-family:DM Mono,monospace;border-radius:2px;" />
+                <input type="file" id="profile-banner-input" class="image-upload-prompt" accept="image/*" />
+                <input type="text" id="profile-banner-url-input" class="image-link-prompt" placeholder="Paste banner URL" style="margin-top:6px;width:100%;padding:6px 8px;border:1px solid var(--border2);background:var(--s2);color:var(--ink);font-size:11px;font-family:DM Mono,monospace;border-radius:2px;" />
               </div>
               <div class="profile-form-group" style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
                 <label style="margin:0;">Show Likes</label>
@@ -2535,14 +2535,16 @@
               <div class="update-textarea-wrapper">
                 <textarea id="detail-reply-textarea" class="update-textarea" placeholder="${X('tweetYourReply')}"></textarea>
               </div>
+              <div id="detail-reply-imgur-wrapper" class="image-link-prompt" style="padding:0 0 6px 0;display:none;">
+                <input id="detail-reply-imgur-url-input" type="url" placeholder="https://i.imgur.com/abc123.jpg" style="width:100%;padding:6px 10px;background:var(--s2);border:1px solid var(--border2);color:var(--ink);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.5px;border-radius:2px;box-sizing:border-box;" />
+              </div>
               <div class="update-footer">
-                <label class="update-image-label">
-                  <span class="update-image-placeholder">+</span>
-                  <span>${X('addMedia')}</span>
-                  <input type="file" accept="image/*,video/*,audio/*" id="detail-reply-image-input" class="update-image-input" />
-                </label>
-                <div class="update-actions">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <label class="update-image-label image-upload-prompt"><span class="update-image-placeholder">+</span><span>${X('addMedia')}</span><input type="file" accept="image/*,video/*,audio/*" id="detail-reply-image-input" class="update-image-input" /></label>
+                  <button type="button" id="detail-reply-imgur-toggle-btn" class="image-link-prompt" style="background:none;border:1px solid var(--border2);color:var(--ink3);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;cursor:pointer;border-radius:2px;transition:border-color .15s,color .15s;" onclick="(function(){const w=document.getElementById('detail-reply-imgur-wrapper');const on=w.style.display==='none';w.style.display=on?'block':'none';document.getElementById('detail-reply-imgur-toggle-btn').style.borderColor=on?'var(--pk)':'var(--border2)';document.getElementById('detail-reply-imgur-toggle-btn').style.color=on?'var(--pk)':'var(--ink3)';if(!on)document.getElementById('detail-reply-imgur-url-input').value='';})()">🖼 Imgur URL</button>
                   <span class="update-selected-image" id="detail-selected-image-name"></span>
+                </div>
+                <div class="update-actions">
                   <button class="update-button" id="detail-reply-submit" disabled>${X('reply')}</button>
                 </div>
               </div>
@@ -2674,21 +2676,25 @@
                       let e = null,
                         t = 'image';
                       try {
-                        const a = document.getElementById('imgur-url-input'),
-                          o = a ? a.value.trim() : '';
-                        o
-                          ? ((e = o.replace(
-                              /^https?:\/\/imgur\.com\/([a-zA-Z0-9]+)$/,
-                              'https://i.imgur.com/$1.jpg',
-                            )),
-                            (t = 'image'))
-                          : u &&
-                            ((t = u.type.startsWith('video/')
-                              ? 'video'
-                              : u.type.startsWith('audio/')
-                                ? 'audio'
-                                : 'image'),
-                            (e = await window._uploadFile(u)));
+                        const isAdmin = document.body.classList.contains('talk-admin');
+                        if (isAdmin) {
+                          if (!u) { alert('Upload a media file.'); return; }
+                          (t = u.type.startsWith('video/')
+                            ? 'video'
+                            : u.type.startsWith('audio/')
+                              ? 'audio'
+                              : 'image'),
+                          (e = await window._uploadFile(u));
+                        } else {
+                          const a = document.getElementById('imgur-url-input'),
+                            o = a ? a.value.trim() : '';
+                          if (!o) { alert('Add a media URL.'); return; }
+                          (e = o.replace(
+                            /^https?:\/\/imgur\.com\/([a-zA-Z0-9]+)$/,
+                            'https://i.imgur.com/$1.jpg',
+                          )),
+                          (t = 'image');
+                        }
                         await x.create({
                           text: i,
                           mediaUrl: e,
@@ -2795,23 +2801,33 @@
                         let e = null,
                           t = 'image';
                         try {
-                          (a &&
-                            ((t = a.type.startsWith('video/')
+                          const isAdmin = document.body.classList.contains('talk-admin');
+                          if (isAdmin) {
+                            if (!a) { alert('Upload a media file.'); return; }
+                            (t = a.type.startsWith('video/')
                               ? 'video'
                               : a.type.startsWith('audio/')
                                 ? 'audio'
                                 : 'image'),
-                            (e = await window._uploadFile(a))),
-                            await x.create({
-                              text: i,
-                              mediaUrl: e,
-                              mediaType: t,
-                              parent_id: V,
-                            }),
-                            (r.value = ''),
-                            (a = null),
-                            (l.value = ''),
-                            (d.textContent = ''));
+                            (e = await window._uploadFile(a));
+                          } else {
+                            const urlInput = document.getElementById('detail-reply-imgur-url-input');
+                            const url = urlInput ? urlInput.value.trim() : '';
+                            if (url) {
+                              (e = url.replace(/^https?:\/\/imgur\.com\/([a-zA-Z0-9]+)$/, 'https://i.imgur.com/$1.jpg')),
+                              (t = 'image');
+                            }
+                          }
+                          await x.create({
+                            text: i,
+                            mediaUrl: e,
+                            mediaType: t,
+                            parent_id: V,
+                          }),
+                          (r.value = ''),
+                          (a = null),
+                          (l.value = ''),
+                          (d.textContent = '');
                         } catch (e) {
                           (console.error('Error creating reply:', e),
                             alert('Failed to post reply.'));
@@ -2865,16 +2881,17 @@
                 if (P) {
                   ((e.disabled = !0), (e.textContent = 'Saving...'));
                   try {
+                    const isAdmin = document.body.classList.contains('talk-admin');
                     let e = P.avatarUrl;
                     const i = document.getElementById('profile-avatar-url-input');
-                    i && i.value.trim()
-                      ? (e = i.value.trim())
-                      : l && (e = await window._uploadFile(l));
+                    isAdmin
+                      ? l && (e = await window._uploadFile(l))
+                      : i && i.value.trim() && (e = i.value.trim());
                     let t = P.bannerUrl;
                     const n = document.getElementById('profile-banner-url-input');
-                    (n && n.value.trim()
-                      ? (t = n.value.trim())
-                      : d && (t = await window._uploadFile(d)),
+                    (isAdmin
+                      ? d && (t = await window._uploadFile(d))
+                      : n && n.value.trim() && (t = n.value.trim()),
                       await y.update(P.id, {
                         nickname: a.value,
                         bio: o.value,

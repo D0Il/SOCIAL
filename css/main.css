@@ -1648,7 +1648,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: url('https://i.imgur.com/tO4Mbo6.jpeg') center/cover;
+    background: url('../assets/images/zebra-bg.jpg') center/cover;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1697,7 +1697,7 @@
     top: 0;
     bottom: 0;
     width: 0%;
-    background: url('https://i.imgur.com/tO4Mbo6.jpeg') center/cover repeat;
+    background: url('../assets/images/zebra-bg.jpg') center/cover repeat;
     border-radius: 999px;
     filter: saturate(0);
     transition: width 1.2s cubic-bezier(.2, .9, .2, 1);
@@ -2523,7 +2523,7 @@
     left: 0;
     bottom: 0;
     width: 38%;
-    background: url('https://i.pinimg.com/originals/53/c4/81/53c4812e63fc6c48b6c60894adad299b.jpg') center/120px;
+    background: url('../assets/images/zebra-bg.jpg') center/120px;
     filter: saturate(0);
     border-radius: 999px;
     animation: zebra-scroll 3s linear infinite;
@@ -3530,12 +3530,13 @@
 
   .yt-thumb img {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    inset: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    max-width: none;
     object-fit: cover;
     display: block;
-    border-radius: 4px;
+    border-radius: inherit;
     image-rendering: auto;
     decoding: async
   }
@@ -4960,5 +4961,15 @@ body:not(.talk-admin) #nav-addpost-btn {
 
 @keyframes page-loader-spin {
   to { transform: rotate(360deg); }
+}
+
+
+/* Image prompt policy: admins upload, visitors link */
+body.talk-admin .image-link-prompt {
+  display: none !important;
+}
+
+body:not(.talk-admin) .image-upload-prompt {
+  display: none !important;
 }
 

@@ -51,7 +51,7 @@
 
 @font-face {
     font-family: Mostwasted;
-    src: url('https://raw.githubusercontent.com/D0Il/Doll/main/Mostwasted.ttf') format('truetype');
+    src: url('../assets/fonts/Mostwasted.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
     font-display: swap
@@ -59,7 +59,7 @@
 
   @font-face {
     font-family: Sprayerz;
-    src: url('https://raw.githubusercontent.com/D0Il/Doll/main/SprayerzDEMO-B85.ttf') format('truetype');
+    src: url('../assets/fonts/SprayerzDEMO-B85.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
     font-display: swap

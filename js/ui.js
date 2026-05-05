@@ -139,11 +139,24 @@ function closeCustomBgModal() {
             n && (n.value = o), m && (m.value = e)
           }
 
-          function submitCustomBg() {
+          async function submitCustomBg() {
             const e = document.getElementById("custom-bg-modal-input");
+            const fileInput = document.getElementById("custom-bg-modal-file");
+            const isAdmin = document.body.classList.contains("talk-admin");
             let t = e ? e.value.trim() : "";
-            if (!t) return alert("Please enter an image URL.");
-            t = t.replace(/^https?:\/\/imgur\.com\/([a-zA-Z0-9]+)$/, "https://i.imgur.com/$1.jpg");
+            if (isAdmin) {
+              const file = fileInput && fileInput.files && fileInput.files[0];
+              if (!file) return alert("Upload an image file.");
+              try {
+                t = await window._uploadFile(file);
+              } catch (err) {
+                alert("Upload failed: " + err.message);
+                return;
+              }
+            } else {
+              if (!t) return alert("Please enter an image URL.");
+              t = t.replace(/^https?:\/\/imgur\.com\/([a-zA-Z0-9]+)$/, "https://i.imgur.com/$1.jpg");
+            }
             const o = document.getElementById("custom-bg-input");
             o && (o.value = t);
             var n = document.getElementById("custom-bg-modal-mode");
@@ -154,6 +167,7 @@ function closeCustomBgModal() {
             } catch (e) {
               console.warn(e)
             }
+            if (fileInput) fileInput.value = "";
             closeCustomBgModal()
           }
 
@@ -332,116 +346,66 @@ function _anBar(e, t, n) {
             e.target === this && (this.style.display = "none")
           })
 
-/* ── UI audio (click/hover sounds) ── */
-! function() {
-            let d = null;
+/* -- UI audio (click/hover sounds) -- */
+!(function () {
+  function makeSound(src, volume) {
+    var base = null;
+    function getBase() {
+      if (!base) {
+        base = new Audio(src);
+        base.preload = 'auto';
+        base.volume = volume;
+      }
+      return base;
+    }
+    return function () {
+      try {
+        var sound = getBase().cloneNode(true);
+        sound.volume = volume;
+        sound.currentTime = 0;
+        sound.play().catch(function () {});
+      } catch (e) {}
+    };
+  }
 
-            function getCtx() {
-              if (!d) {
-                try {
-                  const C = window.AudioContext || window.webkitAudioContext;
-                  if (C) d = new C;
-                } catch (e) {}
-              }
-              return d;
-            }
+  var playHover = makeSound('assets/audio/hover-sound-effect.mp3', 0.35);
+  var playClick = makeSound('assets/audio/click-sound-effect.m4a', 0.45);
+  var playSplat = makeSound('assets/audio/splat-sound-effect.mp3', 0.65);
 
-            function e(e = {}) {
-              const d = getCtx();
-              if (d) {
-                var t = d.currentTime;
-                "suspended" === d.state && d.resume().catch(() => {});
-                const o = d.createGain();
-                o.gain.setValueAtTime(1e-4, t);
-                var n = e.attack || .0012,
-                  a = e.sustain || .028,
-                  c = e.release || .18,
-                  i = e.peak || .11;
-                o.gain.linearRampToValueAtTime(i, t + n), o.gain.exponentialRampToValueAtTime(.6 * i, t + n + a), o.gain
-                  .exponentialRampToValueAtTime(1e-4, t + n + a + c);
-                const s = d.createOscillator();
-                s.type = "sine", s.frequency.value = e.freq || 950;
-                const r = d.createOscillator();
-                r.type = "triangle", r.frequency.value = (e.freq || 950) * (1 + (e.detunePct || .008));
-                const l = d.createBiquadFilter();
-                l.type = "lowpass", l.frequency.value = e.lp || 6400;
-                const u = d.createBiquadFilter();
-                u.type = "highpass", u.frequency.value = e.hp || 200;
-                const p = d.createGain();
-                p.gain.value = e.shimmer || .012, s.connect(l), r.connect(p), p.connect(l), l.connect(u), u.connect(o),
-                  o.connect(d.destination);
-                c = n + a + c + .02;
-                s.start(t), r.start(t), s.stop(t + c), r.stop(t + c);
-                setTimeout(() => {
-                  try {
-                    s.disconnect(), r.disconnect(), p.disconnect(), l.disconnect(), u.disconnect(), o.disconnect()
-                  } catch (e) {}
-                }, 1e3 * (c + .05)), setTimeout(() => function(e, t) {
-                  if (d) {
-                    var n = d.currentTime;
-                    const a = d.createBuffer(1, d.sampleRate * e, d.sampleRate),
-                      c = a.getChannelData(0);
-                    for (let e = 0; e < c.length; e++) c[e] = (2 * Math.random() - 1) * (1 - e / c.length);
-                    const i = d.createBufferSource();
-                    i.buffer = a;
-                    const o = d.createGain();
-                    o.gain.setValueAtTime(t, n), o.gain.exponentialRampToValueAtTime(1e-4, n + e);
-                    const s = d.createBiquadFilter();
-                    s.type = "highpass", s.frequency.value = 800, i.connect(s), s.connect(o), o.connect(d.destination),
-                      i.start(n), i.stop(n + e + .02), i.onended = () => {
-                        try {
-                          i.disconnect(), s.disconnect(), o.disconnect()
-                        } catch (e) {}
-                      }
-                  }
-                }(.06, e.noiseLevel || .007), 8)
-              }
-            }
+  document.addEventListener(
+    'click',
+    function (e) {
+      if (
+        e.target.closest(
+          'button, a, [role="button"], .nb, .insta-cell, .mp-era-card-outer, .panties-widget, .bra-nav-btn, .fans-star-wrap, .talk-nav-pill, .sl-btn, .dropdown-item',
+        )
+      ) {
+        playClick();
+      }
+    },
+    true,
+  );
 
-            function t() {
-              e({
-                freq: 920,
-                detunePct: .009,
-                peak: .12,
-                lp: 5600,
-                hp: 220,
-                shimmer: .014,
-                noiseLevel: .008,
-                attack: .0012,
-                sustain: .03,
-                release: .14
-              })
-            }
+  var hoverTimes = new WeakMap();
+  document.addEventListener(
+    'mouseover',
+    function (e) {
+      var target = e.target.closest('.nb, .bra-nav-btn, .talk-nav-pill, .sl-btn');
+      if (!target) return;
+      var now = Date.now();
+      if (now - (hoverTimes.get(target) || 0) < 110) return;
+      hoverTimes.set(target, now);
+      playHover();
+    },
+    true,
+  );
 
-            function n() {
-              e({
-                freq: 1200,
-                detunePct: .012,
-                peak: .045,
-                lp: 7200,
-                hp: 300,
-                shimmer: .006,
-                noiseLevel: .004,
-                attack: .002,
-                sustain: .02,
-                release: .09
-              })
-            }
-            document.addEventListener("click", function(e) {
-              e.target.closest(
-                'button, a, [role="button"], .nb, .insta-cell, .mp-era-card-outer, .panties-widget, .bra-nav-btn, .fans-star-wrap, .talk-nav-pill, .sl-btn, .dropdown-item'
-              ) && t()
-            }, !0);
-            const a = new WeakMap;
-            document.addEventListener("mouseover", function(e) {
-              var t = e.target.closest(".nb, .bra-nav-btn, .talk-nav-pill, .sl-btn");
-              t && ((e = Date.now()) - (a.get(t) || 0) < 110 || (a.set(t, e), n()))
-            }, !0), window.__uiAudio = {
-              playClick: t,
-              playHover: n
-            }
-          }()
-
+  window.__uiAudio = {
+    playClick: playClick,
+    playHover: playHover,
+    playSplat: playSplat,
+  };
+})();
 /* ── dayjs timestamp refresh ── */
 setInterval(function() {
             "undefined" != typeof dayjs && document.querySelectorAll(".tweet-time[data-ts]").forEach(function(t) {

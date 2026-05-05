@@ -23,7 +23,7 @@
                     function o(t) {
                       const o = document.getElementById("community-avatar");
                       if (o) {
-                        t = t ? "url('" + t + "')" : "url('https://i.imgur.com/ct2ERKN.jpeg')";
+                        t = t ? "url('" + t + "')" : "url('assets/images/web-profile-pic.jpg')";
                         o.style.backgroundImage = t;
                         const n = document.getElementById("mob-com-avatar");
                         n && (n.style.backgroundImage = t)
@@ -73,9 +73,9 @@
                       var i;
                       window.S && S.profile && S.profile.avatar ? o(S.profile.avatar) : window.S && S.profile && void 0 ===
                         S.profile.avatar ? o(null) : o((i = document.querySelector("#sl-avatar-inner img")) ? i.src :
-                          "https://i.imgur.com/ct2ERKN.jpeg")
+                          "assets/images/web-profile-pic.jpg")
                     } catch (t) {
-                      o("https://i.imgur.com/ct2ERKN.jpeg")
+                      o("assets/images/web-profile-pic.jpg")
                     }
                     const e = window.syncMusicSidebar;
                     window.syncMusicSidebar = function() {

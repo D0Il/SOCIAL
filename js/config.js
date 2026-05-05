@@ -28,16 +28,16 @@ window.FD_CFG = {
       appId: "1:390874917783:web:9e1a9a7de9a1d1ef06b2d2"
     },
     textureUrls: {
-      stone: "https://img.freepik.com/free-photo/stone-wall-texture_1194-5944.jpg?semt=ais_rp_progressive&w=740&q=80",
-      concrete: "https://static.wixstatic.com/media/a8e1f3e15ccb41b88df85a10bb90531a.jpg/v1/fill/w_824,h_440,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Concrete.jpg"
+      stone: "assets/images/white-stone.jpg",
+      concrete: "assets/images/concrete.jpg"
     },
     defaultProfile: {
       spotify: "https://open.spotify.com/track/1lZ1jrs8QOc0sFs38A32Aj",
       apple: "https://music.apple.com/ca/song/birthday-suit/1888560707",
-      avatar: "https://i.imgur.com/ct2ERKN.jpeg",
+      avatar: "assets/images/web-profile-pic.jpg",
       audio: {
         name: "Birthday Suit.wav",
-        dataUrl: "https://www.dropbox.com/scl/fi/4wleig23h3uw2hdckg30p/Birthday-Suit.wav?rlkey=2v0jm6sqiuw06e8a81l9a1sjd&st=jzunueqn&raw=1",
+        dataUrl: "assets/audio/birthday-suit.wav",
         isUrl: !0
       }
     },

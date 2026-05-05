@@ -7,7 +7,6 @@
   <!-- Preconnect to key CDNs -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
   <link rel="preconnect" href="https://i.imgur.com">
   <link rel="preconnect" href="https://i.ytimg.com">
   <link rel="preconnect" href="https://noembed.com">
@@ -15,8 +14,8 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Merriweather:ital,wght@0,300;1,300&family=Montserrat:wght@900&family=Big+Shoulders+Display:wght@900&family=Boogaloo&display=swap"
     rel="stylesheet" media="print" onload="this.media='all'">
-  <link rel="preload" href="https://raw.githubusercontent.com/D0Il/Doll/main/SprayerzDEMO-B85.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="preload" href="https://raw.githubusercontent.com/D0Il/Doll/main/Mostwasted.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/SprayerzDEMO-B85.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/Mostwasted.ttf" as="font" type="font/ttf" crossorigin>
 
   <!-- Styles (load parallel) -->
   <link rel="stylesheet" href="css/reset.css">
@@ -33,7 +32,7 @@
 </head>
 <body>
 
-<svg height=0 width=0 style=position:absolute;pointer-events:none><defs><filter color-interpolation-filters=sRGB id=nav-zebra-desat><feColorMatrix type=saturate values=0 /><feComponentTransfer><feFuncR slope=1.2 type=linear /><feFuncG slope=1.2 type=linear /><feFuncB slope=1.2 type=linear /></feComponentTransfer></filter><pattern height=60 id=zebra-nav-pattern patternUnits=userSpaceOnUse width=60 patternTransform=rotate(-25)><image filter=url(#nav-zebra-desat) height=70 href=https://i.imgur.com/tO4Mbo6.jpeg preserveAspectRatio="xMidYMid slice" width=70 x=-5 y=-5 /></pattern></defs></svg>
+<svg height=0 width=0 style=position:absolute;pointer-events:none><defs><filter color-interpolation-filters=sRGB id=nav-zebra-desat><feColorMatrix type=saturate values=0 /><feComponentTransfer><feFuncR slope=1.2 type=linear /><feFuncG slope=1.2 type=linear /><feFuncB slope=1.2 type=linear /></feComponentTransfer></filter><pattern height=60 id=zebra-nav-pattern patternUnits=userSpaceOnUse width=60 patternTransform=rotate(-25)><image filter=url(#nav-zebra-desat) height=70 href=assets/images/zebra-bg.jpg preserveAspectRatio="xMidYMid slice" width=70 x=-5 y=-5 /></pattern></defs></svg>
 
 
   <nav class=nav>
@@ -77,8 +76,8 @@
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);margin-bottom:2px">Instagram post URL</div>
         <input id=modal-insta-url placeholder="https://www.instagram.com/p/..." type=url style="background:var(--s2);border:1px solid var(--border2);color:var(--ink);font-family:'DM Mono',monospace;font-size:11px;padding:7px 10px;outline:0;width:100%;box-sizing:border-box">
-        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);margin-bottom:2px">Direct image URL (i.imgur.com, etc.)</div>
-        <input id=modal-insta-img placeholder="https://i.imgur.com/abc.jpg" type=url style="background:var(--s2);border:1px solid var(--border2);color:var(--ink);font-family:'DM Mono',monospace;font-size:11px;padding:7px 10px;outline:0;width:100%;box-sizing:border-box">
+        <div class=image-link-prompt style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);margin-bottom:2px">Direct image URL</div>
+        <input id=modal-insta-img class=image-link-prompt placeholder="https://example.com/image.jpg" type=url style="background:var(--s2);border:1px solid var(--border2);color:var(--ink);font-family:'DM Mono',monospace;font-size:11px;padding:7px 10px;outline:0;width:100%;box-sizing:border-box"><div class=image-upload-prompt style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);margin-bottom:2px">Upload image file</div><input id=modal-insta-img-file class=image-upload-prompt accept=image/* type=file style="background:var(--s2);border:1px solid var(--border2);color:var(--ink);font-family:'DM Mono',monospace;font-size:11px;padding:7px 10px;outline:0;width:100%;box-sizing:border-box">
         <button onclick=window._submitAddPost() style="margin-top:4px;background:var(--pk);border:none;color:#111;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:9px;cursor:pointer;border-radius:3px;width:100%">Add to Grid</button>
       </div>
     </div>
@@ -88,7 +87,7 @@
     window._closeRestoreModal=function(){var m=document.getElementById('insta-restore-modal');if(m)m.style.display='none';};
     window._openAddPostModal=function(){var m=document.getElementById('insta-add-modal');if(!m)return;m.style.display='flex';var dd=document.getElementById('nav-settings-dropdown');if(dd){dd.classList.remove('open');dd.setAttribute('aria-hidden','true');}setTimeout(function(){var el=document.getElementById('modal-insta-url');if(el)el.focus();},50);};
     window._closeAddPostModal=function(){var m=document.getElementById('insta-add-modal');if(m)m.style.display='none';};
-    window._submitAddPost=function(){var u=(document.getElementById('modal-insta-url')||{}).value||'',i=(document.getElementById('modal-insta-img')||{}).value||'';if(!u||!i){alert('Fill in both fields.');return;}if(typeof addInstaPost==='function')addInstaPost(u.trim(),i.trim());document.getElementById('modal-insta-url').value='';document.getElementById('modal-insta-img').value='';window._closeAddPostModal();};
+    window._submitAddPost=async function(){var u=(document.getElementById('modal-insta-url')||{}).value||'',imgEl=document.getElementById('modal-insta-img'),fileEl=document.getElementById('modal-insta-img-file'),isAdmin=document.body.classList.contains('talk-admin'),i=imgEl?imgEl.value:'';if(!u){alert('Add the Instagram post URL.');return;}if(isAdmin){var f=fileEl&&fileEl.files&&fileEl.files[0];if(!f){alert('Upload an image file.');return;}try{i=await window._uploadFile(f);}catch(e){alert('Upload failed: '+e.message);return;}}else if(!i){alert('Add a direct image URL.');return;}if(typeof addInstaPost==='function')addInstaPost(u.trim(),i.trim());document.getElementById('modal-insta-url').value='';if(imgEl)imgEl.value='';if(fileEl)fileEl.value='';window._closeAddPostModal();};
   </script>
   </nav>
   <div id=mobile-top-bar><button onclick='showPage("live")' class=mob-top-btn id=mob-live-btn aria-label=Live><svg viewBox="0 0 24 24" height=22 width=22 style=overflow:visible><circle r=3 cx=12 cy=11 fill=currentColor stroke=none /><path d="M8 7.5a5.5 5.5 0 018 0" class=live-arc1 fill=none stroke=currentColor stroke-width=1.8 stroke-linecap=round /><path d="M5 4.5a10 10 0 0114 0" class=live-arc2 fill=none stroke=currentColor stroke-width=1.8 stroke-linecap=round opacity=0.45 /><line x1=12 x2=12 y1=14 y2=19 stroke-width=2 stroke=currentColor stroke-linecap=round /><line x1=9 x2=15 y1=19 y2=19 stroke-width=2 stroke=currentColor opacity=0.4 stroke-linecap=round /></svg></button>    <button onclick='showPage("shop")' id=mob-shop-btn aria-label=Shop><div class=bra-nav-btn style=pointer-events:none aria-hidden=true><svg viewBox="0 -10 120 68" xmlns=http://www.w3.org/2000/svg class=bra-svg overflow=visible><defs><pattern height=5.2 id=bra-lm2 patternUnits=userSpaceOnUse width=6><circle r=1.6 cx=3 cy=0 fill=none stroke=var(--pk) stroke-width=0.35 opacity=0.32 /><circle r=1.6 cx=0 cy=2.6 fill=none stroke=var(--pk) stroke-width=0.35 opacity=0.32 /><circle r=1.6 cx=6 cy=2.6 fill=none stroke=var(--pk) stroke-width=0.35 opacity=0.32 /><circle r=1.6 cx=3 cy=5.2 fill=none stroke=var(--pk) stroke-width=0.35 opacity=0.32 /></pattern><clipPath id=blc2><path d="M60,28 C56,20 44,10 26,9 C12,8 4,18 4,32 C4,44 14,50 34,50 C48,50 57,44 60,40 Z"/></clipPath><clipPath id=brc2><path d="M60,28 C64,20 76,10 94,9 C108,8 116,18 116,32 C116,44 106,50 86,50 C72,50 63,44 60,40 Z"/></clipPath></defs><path d="M60,28 C56,20 44,10 26,9 C12,8 4,18 4,32 C4,44 14,50 34,50 C48,50 57,44 60,40 Z" class=bra-cup-fill /><path d="M 10,14 Q 14,8 18,12 Q 22,6 26,10 Q 30,5 34,9 Q 38,6 42,11 Q 46,8 50,14 Q 54,12 58,20" class=bra-lace-top /><rect height=58 width=68 x=-2 y=-2 fill=url(#bra-lm2) clip-path=url(#blc2) /><g clip-path=url(#blc2)><circle r=1.1 cx=20 cy=22 class=bra-pearl /><circle r=0.9 cx=32 cy=16 class=bra-pearl /><circle r=1.1 cx=44 cy=22 class=bra-pearl /></g><path d="M6,40 C16,48 30,51 57,47" class=bra-underwire /><path d="M60,28 C64,20 76,10 94,9 C108,8 116,18 116,32 C116,44 106,50 86,50 C72,50 63,44 60,40 Z" class=bra-cup-fill /><path d="M 62,20 Q 66,12 70,14 Q 74,8 78,11 Q 82,6 86,9 Q 90,5 94,10 Q 98,6 102,12 Q 106,8 110,14" class=bra-lace-top /><rect height=58 width=68 x=54 y=-2 fill=url(#bra-lm2) clip-path=url(#brc2) /><g clip-path=url(#brc2)><circle r=1.1 cx=100 cy=22 class=bra-pearl /><circle r=0.9 cx=88 cy=16 class=bra-pearl /><circle r=1.1 cx=76 cy=22 class=bra-pearl /></g><path d="M114,40 C104,48 90,51 63,47" class=bra-underwire /><line x1=27 x2=27 y1=10 y2=-7 class=bra-strap /><line x1=31 x2=31 y1=10 y2=-7 class=bra-strap opacity=0.5 /><line x1=89 x2=89 y1=10 y2=-7 class=bra-strap /><line x1=93 x2=93 y1=10 y2=-7 class=bra-strap opacity=0.5 /><line x1=60 x2=60 y1=28 y2=44 class=bra-gore /><g style=overflow:visible><path d="M60,36 C59,33 56.5,31 54,31.8 C51.5,32.6 51,35.5 52.5,37 C54,38.5 57.5,38 59.5,36.8 C59.8,36.5 60,36.2 60,36 Z" class=bra-bow-loop /><path d="M60,36 C61,33 63.5,31 66,31.8 C68.5,32.6 69,35.5 67.5,37 C66,38.5 62.5,38 60.5,36.8 C60.2,36.5 60,36.2 60,36 Z" class=bra-bow-loop /><ellipse cx=60 cy=36 rx=1.4 ry=1.7 class=bra-bow-knot-fill /><path d="M59.2,37.6 C58.4,40 57.3,43 56.5,46 C55.8,48.5 55.5,50.5 55.8,52.5" class="bra-bow-ribbon ribbon-1"/><path d="M60.8,37.6 C61.6,40 62.7,43 63.5,46 C64.2,48.5 64.5,50.5 64.2,52.5" class="bra-bow-ribbon ribbon-2"/><path d="M54.5,52.2 C55,53.5 56.4,53.5 56.9,52.2" class=bra-bow-tip /><path d="M65.5,52.2 C65,53.5 63.6,53.5 63.1,52.2" class=bra-bow-tip /></g></svg><div class=bra-left-content><div style=position:relative;display:flex;align-items:center;justify-content:center;width:18px;height:22px><svg viewBox="0 0 24 24" height=17 width=13 fill=none stroke=currentColor stroke-width=2.6 stroke-linecap=round><line x1=12 x2=12 y1=2 y2=22 /><path d="M17 6H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H7"/></svg> <span class=shop-dollar-1 style=position:absolute;font-size:12px;top:-7px;right:-7px;pointer-events:none;line-height:1;font-family:monospace;font-weight:900>$</span> <span class=shop-dollar-2 style=position:absolute;font-size:10px;top:-12px;right:-2px;pointer-events:none;line-height:1;font-family:monospace;font-weight:800;opacity:.85>$</span> <span class=shop-dollar-3 style=position:absolute;font-size:9px;top:-5px;right:-14px;pointer-events:none;line-height:1;font-family:monospace;font-weight:700;opacity:.6>$</span></div></div><div class=bra-right-content><span class=bra-shop-label>Shop</span></div></div></button>    <button class=mob-top-btn id=mob-settings-btn aria-label=Settings><svg viewBox="0 0 24 24" height=20 width=20 fill=currentColor><rect height=2 width=16 x=4 y=6 rx=1 /><rect height=2 width=16 x=4 y=11 rx=1 /><rect height=2 width=16 x=4 y=16 rx=1 /></svg></button></div>
@@ -136,14 +135,14 @@
             </div>
             <div class=ep-body style=overflow-y:auto;flex:1>
               <div style="padding:20px 24px;border-bottom:1px solid rgba(237,232,222,.06);display:flex;gap:18px;align-items:flex-start;background:linear-gradient(180deg,rgba(212,160,181,.04),transparent)">
-                <div class=ep-av-wrap style=flex-shrink:0 onclick='document.getElementById("ep-avatar-input").click()'>
+                <div class=ep-av-wrap style=flex-shrink:0 onclick='document.body.classList.contains("talk-admin")&&document.getElementById("ep-avatar-input").click()'>
                   <div class=ep-av-preview id=ep-av-preview><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle r=4 cx=12 cy=7 /></svg></div>
                   <div
-                    class=ep-av-overlay><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle r=4 cx=12 cy=13 /></svg>                    <span>Change</span></div>
-              </div><input id=ep-avatar-input type=file onchange=handleAvatarUpload(this) style=display:none accept=image/*>
+                    class="ep-av-overlay image-upload-prompt"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle r=4 cx=12 cy=13 /></svg>                    <span>Change</span></div>
+              </div><input id=ep-avatar-input class=image-upload-prompt type=file onchange=handleAvatarUpload(this) style=display:none accept=image/*>
               <div
                 style=flex:1>
-                <div style="font-family:'DM Mono',monospace;font-size:6px;letter-spacing:3px;text-transform:uppercase;color:var(--pk);margin-bottom:8px">Profile Photo</div><input id=ep-avatar-url placeholder=https://i.imgur.com/... class=ep-field oninput=handleAvatarUrl(this.value)
+                <div class=image-link-prompt style="font-family:'DM Mono',monospace;font-size:6px;letter-spacing:3px;text-transform:uppercase;color:var(--pk);margin-bottom:8px">Profile Photo URL</div><input id=ep-avatar-url placeholder=https://example.com/photo.jpg class="ep-field image-link-prompt" oninput=handleAvatarUrl(this.value)
                   style=width:100%;margin-bottom:6px>
                 <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);letter-spacing:1px;opacity:.8">paste an imgur/dropbox URL · or click photo to upload</div>
             </div>
@@ -354,8 +353,8 @@
               <div style="font-family:DM Mono,monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink)">Custom Background</div><button onclick=closeCustomBgModal() class=cb-close style="background:0 0;border:none;color:var(--ink3);cursor:pointer;font-size:18px;padding:6px 8px">✕</button></div>
             <div
               class=cb-body>
-              <div style=display:flex;flex-direction:column;gap:6px><label class=m-lbl>Image URL</label> <input id=custom-bg-modal-input placeholder=https://i.imgur.com/abc123.jpg
-                  class=cb-input oninput=updateCustomBgPreview(this.value)></div>
+              <div class=image-link-prompt style=display:flex;flex-direction:column;gap:6px><label class=m-lbl>Image URL</label> <input id=custom-bg-modal-input placeholder=https://example.com/background.jpg
+                  class=cb-input oninput=updateCustomBgPreview(this.value)></div><div class=image-upload-prompt style=display:flex;flex-direction:column;gap:6px><label class=m-lbl>Upload Image</label><input id=custom-bg-modal-file type=file accept=image/* class=cb-input></div>
               <div style=display:flex;gap:8px;align-items:center>
                 <div style=flex:1>
                   <div class=m-lbl style=margin-bottom:6px>Mode</div><select id=custom-bg-modal-mode style=padding:8px class=cb-input><option value=tile>Tile (repeat)<option value=cover>Fill (cover)</select></div>
@@ -365,7 +364,7 @@
                   <div style=display:flex;gap:8px><button onclick=removeCustomBg() class=cb-btn>Remove</button> <button onclick=submitCustomBg() class="cb-btn primary">Set</button></div>
               </div>
           </div>
-          <div style="font-family:DM Mono,monospace;font-size:11px;color:var(--ink3)">Paste a direct image URL (imgur direct link, dropbox raw, etc.). Imgur page links will be normalized to i.imgur.com.</div>
+          <div class=image-link-prompt style="font-family:DM Mono,monospace;font-size:11px;color:var(--ink3)">Paste a direct image URL.</div><div class=image-upload-prompt style="font-family:DM Mono,monospace;font-size:11px;color:var(--ink3)">Upload an image file from this device.</div>
         </div>
         <div class=cb-foot style=display:none><button onclick=closeCustomBgModal() class=cb-btn>${'Cancel'}</button> <button onclick=submitCustomBg() class="cb-btn primary">Set Background</button></div>
         </div>

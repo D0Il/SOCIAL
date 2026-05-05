@@ -109,6 +109,7 @@ var S = {
         embedUrl:
           'https://www.youtube-nocookie.com/embed/videoseries?list=PLhRgPfuqZrXM9XvNAcbM1Q-dB-Cp2HyRO',
         caption: 'OCTODAD: DADLIEST CATCH',
+        thumbUrl: 'assets/images/octodad-series-thumbnail.jpg',
         time: 'Jan 31, 2025',
         episodeCount: 2,
         likes: 0,
@@ -302,10 +303,15 @@ function showPage(page) {
   /* Talk intro */
   if (page === 'talk') {
     var intro = document.getElementById('talk-intro');
-    if (intro)
+    if (intro) {
+      intro.classList.remove('playing');
+      void intro.offsetWidth;
+      intro.classList.add('playing');
+      if (window.__uiAudio && typeof window.__uiAudio.playSplat === 'function') window.__uiAudio.playSplat();
       setTimeout(function () {
-        intro.style.opacity = '0';
-      }, 1200);
+        intro.classList.remove('playing');
+      }, 1700);
+    }
   }
 
   /* Community forces dark mode; restore theme when leaving */

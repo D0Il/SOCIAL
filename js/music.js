@@ -24,7 +24,7 @@
       return l.label === 'Music Video';
     })
   ) {
-    _eraPhotos.birthday_suit = 'https://i.imgur.com/ITiSeNm.jpeg';
+    _eraPhotos.birthday_suit = 'assets/images/birthday-suit-official-cover.jpg';
     ERAS.birthday_suit = {
       name: 'BIRTHDAY SUIT',
       tag: 'Single · MAR 27 2026',
@@ -222,7 +222,7 @@
       if (originEl) originEl.textContent = profile.origin || '';
       if (bioEl) bioEl.textContent = profile.bio || '';
     } else {
-      if (avatarEl && !avatarEl.src) avatarEl.src = 'https://i.imgur.com/ct2ERKN.jpeg';
+      if (avatarEl && !avatarEl.src) avatarEl.src = 'assets/images/web-profile-pic.jpg';
       if (nameEl && !nameEl.textContent) nameEl.textContent = 'FAME DOLL';
     }
   }

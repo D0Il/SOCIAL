@@ -10,7 +10,7 @@
   function setCommunityAvatar(url) {
     var el = document.getElementById('community-avatar');
     if (el) {
-      el.style.backgroundImage = "url('" + (url || 'https://i.imgur.com/ct2ERKN.jpeg') + "')";
+      el.style.backgroundImage = "url('" + (url || 'assets/images/web-profile-pic.jpg') + "')";
       var mob = document.getElementById('mob-com-avatar');
       if (mob) mob.style.backgroundImage = el.style.backgroundImage;
     }
@@ -69,10 +69,10 @@
         ? window.S.profile.avatar
         : avatarImg
           ? avatarImg.src
-          : 'https://i.imgur.com/ct2ERKN.jpeg';
+          : 'assets/images/web-profile-pic.jpg';
     setCommunityAvatar(avatarUrl);
   } catch (e) {
-    setCommunityAvatar('https://i.imgur.com/ct2ERKN.jpeg');
+    setCommunityAvatar('assets/images/web-profile-pic.jpg');
   }
 
   /* Wrap syncMusicSidebar to also keep community avatar in sync */

@@ -674,7 +674,7 @@
 #page-live {
             position: relative;
             min-height: calc(100vh - 80px);
-            background: url('https://i.pinimg.com/originals/53/c4/81/53c4812e63fc6c48b6c60894adad299b.jpg') repeat;
+            background: url('../assets/images/zebra-bg.jpg') repeat;
             background-size: 38px;
             image-rendering: pixelated;
             image-rendering: crisp-edges;
