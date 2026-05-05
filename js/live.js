@@ -51,7 +51,7 @@ window._initTwitchOnce = function () {
     if (typeof Twitch !== 'undefined' && Twitch.Player) {
       window.twitchPlayer = new Twitch.Player(containerId, {
         width: '100%',
-        height: 480,
+        height: '100%',
         channel: 'famedoll',
         parent: parents,
       });

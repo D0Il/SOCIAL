@@ -69,24 +69,10 @@
         /(<path[^/]*\/>|<path[^>]*>.*?<\/path>|<circle[^/]*\/>|<polygon[^/]*\/>|<rect[^/]*\/>)/gs,
       ) || []
     ).join('');
-    var id = 'zbp_' + platform;
     return (
-      '<svg viewBox="0 0 24 24" width="22" height="22" xmlns="http://www.w3.org/2000/svg">' +
-      '<defs><pattern id="' +
-      id +
-      '" patternUnits="userSpaceOnUse" width="24" height="24">' +
-      '<filter id="gs"><feColorMatrix type="saturate" values="0"/></filter>' +
-      '<image href="https://i.pinimg.com/originals/53/c4/81/53c4812e63fc6c48b6c60894adad299b.jpg" width="24" height="24" preserveAspectRatio="xMidYMid slice" filter="url(#gs)"/>' +
-      '</pattern><mask id="' +
-      id +
-      'm"><g fill="white">' +
+      '<svg viewBox="0 0 24 24" width="22" height="22" xmlns="http://www.w3.org/2000/svg" fill="currentColor">' +
       parts +
-      '</g></mask></defs>' +
-      '<rect width="24" height="24" fill="url(#' +
-      id +
-      ')" mask="url(#' +
-      id +
-      'm)"/></svg>'
+      '</svg>'
     );
   }
 

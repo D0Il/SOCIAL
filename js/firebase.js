@@ -158,6 +158,7 @@
             .join('');
           if (typeof applyAllCrops === 'function') applyAllCrops();
           if (typeof wireInstaClickCrop === 'function') wireInstaClickCrop();
+          if (typeof _applyMasonry === 'function') setTimeout(_applyMasonry, 150);
         }
       }
 

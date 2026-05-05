@@ -2345,6 +2345,7 @@
             ((C = e),
               le(),
               oe(),
+              (window._cachedBlogPosts = e),
               window.updateLatestPostWidget && window.updateLatestPostWidget(e));
           }),
           E.subscribe((e) => {

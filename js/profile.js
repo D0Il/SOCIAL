@@ -1262,6 +1262,34 @@ function renderGrid(tab) {
 }
 window.renderGrid = renderGrid;
 
+/* ── CSS Grid masonry: sets grid-row-end span so items snug up with no gaps ── */
+function _applyMasonry() {
+  var grid = document.getElementById('grid-gallery');
+  if (!grid) return;
+  var rowH = 3; /* matches grid-auto-rows: 3px in main.css */
+  var pending = 0;
+  grid.querySelectorAll('.insta-cell').forEach(function (cell) {
+    var img = cell.querySelector('img');
+    function applySpan() {
+      var h = cell.getBoundingClientRect().height;
+      if (!h && img) h = img.naturalHeight * (cell.offsetWidth / img.naturalWidth) + 3;
+      cell.style.gridRowEnd = 'span ' + Math.ceil(h / rowH);
+    }
+    if (!img || (img.complete && img.naturalHeight > 0)) {
+      applySpan();
+    } else {
+      pending++;
+      img.addEventListener('load', function () {
+        applySpan();
+        pending--;
+        if (pending === 0) _applyMasonry();
+      }, { once: true });
+      img.addEventListener('error', function () { pending--; }, { once: true });
+    }
+  });
+}
+window._applyMasonry = _applyMasonry;
+
 /* ══ YouTube sidebar ═════════════════════════════════════════════ */
 var YT_API_KEY = 'AIzaSyDBMSTnP-KFACKIFoCFWnlSPPTIcEs7aco';
 var YT_PLAYLIST_ID = 'PLhRgPfuqZrXNrd24d6fXO0ZKhWFm922oM';
