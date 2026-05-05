@@ -96,6 +96,8 @@
       case 'scrollables':
         var scrollBtn = document.getElementById('scroll-grid-btn');
         if (scrollBtn) scrollBtn.style.display = 'flex';
+        if (typeof window._initScrollSort === 'function') window._initScrollSort();
+        if (typeof window._initScrollThumbs === 'function') window._initScrollThumbs();
         /* Re-trigger TikTok embed processing */
         if (window.tiktokEmbed && typeof window.tiktokEmbed.lib === 'object') {
           try {

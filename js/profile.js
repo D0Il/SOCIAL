@@ -1262,30 +1262,41 @@ function renderGrid(tab) {
 }
 window.renderGrid = renderGrid;
 
-/* ── CSS Grid masonry: sets grid-row-end span so items snug up with no gaps ── */
+/* ── CSS Grid masonry ──────────────────────────────────────────────────────
+   Uses img.naturalHeight/naturalWidth so spans are correct even before
+   images have painted. Falls back to scrollHeight for non-image cells.
+   Called after grid render and after each image loads.              ── */
 function _applyMasonry() {
   var grid = document.getElementById('grid-gallery');
   if (!grid) return;
   var rowH = 3; /* matches grid-auto-rows: 3px in main.css */
-  var pending = 0;
-  grid.querySelectorAll('.insta-cell').forEach(function (cell) {
+  var colW = 0;
+  var cells = Array.from(grid.querySelectorAll('.insta-cell'));
+  if (!cells.length) return;
+
+  /* Get one reliable column width */
+  if (cells[0]) colW = cells[0].getBoundingClientRect().width || (grid.offsetWidth / 5);
+
+  cells.forEach(function (cell) {
     var img = cell.querySelector('img');
-    function applySpan() {
-      var h = cell.getBoundingClientRect().height;
-      if (!h && img) h = img.naturalHeight * (cell.offsetWidth / img.naturalWidth) + 3;
-      cell.style.gridRowEnd = 'span ' + Math.ceil(h / rowH);
-    }
-    if (!img || (img.complete && img.naturalHeight > 0)) {
-      applySpan();
-    } else {
-      pending++;
+    var h;
+    if (img && img.naturalWidth > 0 && img.naturalHeight > 0) {
+      /* Natural aspect ratio scaled to current column width, +3 for padding-bottom */
+      h = Math.round(img.naturalHeight * colW / img.naturalWidth) + 3;
+    } else if (img && !img.complete) {
+      /* Image not loaded yet — apply a placeholder span and wait */
+      cell.style.gridRowEnd = 'span 100';
       img.addEventListener('load', function () {
-        applySpan();
-        pending--;
-        if (pending === 0) _applyMasonry();
+        requestAnimationFrame(_applyMasonry);
       }, { once: true });
-      img.addEventListener('error', function () { pending--; }, { once: true });
+      img.addEventListener('error', function () {
+        cell.style.gridRowEnd = 'span 50';
+      }, { once: true });
+      return;
+    } else {
+      h = cell.scrollHeight || 100;
     }
+    cell.style.gridRowEnd = 'span ' + Math.max(1, Math.ceil(h / rowH));
   });
 }
 window._applyMasonry = _applyMasonry;
@@ -1823,7 +1834,13 @@ window.submitPost = submitPost;
 /* ══ Latest post widget ══════════════════════════════════════════ */
 function updateLatestPostWidget(posts) {
   var widget = document.getElementById('latest-post-widget');
-  if (!widget) return;
+  if (!widget) {
+    /* Profile page not in DOM yet — retry once it loads */
+    if (posts && posts.length) {
+      setTimeout(function () { updateLatestPostWidget(posts); }, 300);
+    }
+    return;
+  }
   var list = posts || [];
   if (!list.length) {
     widget.style.display = 'none';
