@@ -1410,6 +1410,8 @@ async function renderYT() {
         })(post);
         featList.appendChild(item);
       });
+    }
+
     /* Async: fetch real titles + playlist thumbnails, update DOM + cache */
     _fetchYTMeta(cinema).catch(function () {});
   } catch (err) {

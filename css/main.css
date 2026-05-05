@@ -3190,15 +3190,16 @@
   }
 
   .insta-grid {
-    columns: 5;
-    column-gap: 3px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 3px;
     padding: 3px;
+    align-items: start;
     background: rgba(237, 232, 222, .04)
   }
 
   .insta-cell {
-    break-inside: avoid;
-    margin-bottom: 3px;
+    margin-bottom: 0;
     background: var(--s2);
     overflow: hidden;
     cursor: pointer;
