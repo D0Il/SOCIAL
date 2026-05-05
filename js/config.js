@@ -37,7 +37,7 @@ window.FD_CFG = {
       avatar: "assets/images/web-profile-pic.jpg",
       audio: {
         name: "Birthday Suit.wav",
-        dataUrl: "assets/audio/birthday-suit.wav",
+        dataUrl: "https://www.dropbox.com/scl/fi/4wleig23h3uw2hdckg30p/Birthday-Suit.wav?rlkey=2v0jm6sqiuw06e8a81l9a1sjd&st=qmqcdzzn&dl=1",
         isUrl: !0
       }
     },
@@ -75,10 +75,19 @@ window.FD_CFG = {
 
   window.fdLoadScript = function(src) {
     return new Promise(function(resolve, reject) {
-      if (document.querySelector(`script[src="${src}"]`)) return resolve();
-      const script = document.createElement("script");
+      var existing = document.querySelector('script[src="' + src + '"]');
+      if (existing) {
+        // Element exists — but is the script actually done loading?
+        if (existing.dataset.fdLoaded) return resolve();
+        // Still in-flight (firebase.js injected it but hasn't finished yet).
+        // Wait for it instead of resolving prematurely.
+        existing.addEventListener('load', resolve);
+        existing.addEventListener('error', reject);
+        return;
+      }
+      var script = document.createElement('script');
       script.src = src;
-      script.onload = resolve;
+      script.onload = function() { script.dataset.fdLoaded = '1'; resolve(); };
       script.onerror = reject;
       document.head.appendChild(script);
     });
