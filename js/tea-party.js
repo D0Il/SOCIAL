@@ -2358,6 +2358,7 @@
       <header class="app-topbar">
         <div class="app-topbar-left">
           <a href="#" class="mobile-nav-item mobile-only" id="nav-search-mobile"></a>
+          <input class="app-search-input" type="text" placeholder="${X('search')}" />
         </div>
 
         <div class="app-topbar-center-nav">
@@ -2372,7 +2373,6 @@
         </div>
 
         <div class="app-topbar-right">
-          <input class="app-search-input" type="text" placeholder="${X('search')}" />
           <button id="topbar-refresh-btn" title="${X('refresh')}" style="background:none; border:none; cursor:pointer; width:28px; height:28px; display:flex; align-items:center; justify-content:center;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="opacity:0.85;">
               <path d="M21 12a9 9 0 10-3.22 6.39" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>

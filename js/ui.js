@@ -334,16 +334,20 @@ function _anBar(e, t, n) {
 
 /* ── UI audio (click/hover sounds) ── */
 ! function() {
-            const d = function() {
-              try {
-                const e = window.AudioContext || window.webkitAudioContext;
-                return e ? new e : null
-              } catch (e) {
-                return null
+            let d = null;
+
+            function getCtx() {
+              if (!d) {
+                try {
+                  const C = window.AudioContext || window.webkitAudioContext;
+                  if (C) d = new C;
+                } catch (e) {}
               }
-            }();
+              return d;
+            }
 
             function e(e = {}) {
+              const d = getCtx();
               if (d) {
                 var t = d.currentTime;
                 "suspended" === d.state && d.resume().catch(() => {});

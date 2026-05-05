@@ -122,4 +122,14 @@
   };
 
   window.__famedoll_visible = true;
+
+  /* ── Catch-up: re-init any pages that loaded before _onPageLoad was defined ──
+     pages.js is the last deferred script. If a pre-loaded page (e.g. music, talk)
+     finished its _loadPage fetch before pages.js ran, _onPageLoad was null at that
+     point and no init happened. We fix that here. */
+  Object.keys(window._pageCache || {}).forEach(function (pageName) {
+    try {
+      window._onPageLoad(pageName);
+    } catch (e) {}
+  });
 })();

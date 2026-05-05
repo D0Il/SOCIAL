@@ -1345,7 +1345,7 @@ async function renderYT() {
       var post = cinema[i];
       var isPlaylist = post.type === 'playlist' && post.playlistId;
       var thumb = isPlaylist
-        ? 'https://i.ytimg.com/vi/default/hqdefault.jpg'
+        ? (post.thumbUrl || 'https://i.ytimg.com/vi_webp/default/hqdefault.webp')
         : 'https://i.ytimg.com/vi/' + post.idstr + '/hqdefault.jpg';
       var title = isPlaylist ? post.caption || 'Playlist' : post.caption || 'YouTube Video';
       var seriesMeta = isPlaylist
@@ -1366,7 +1366,8 @@ async function renderYT() {
         el.remove();
       });
       cinema.forEach(function (post) {
-        var thumb = 'https://i.ytimg.com/vi/' + (post.idstr || '') + '/hqdefault.jpg';
+        var isPlaylistItem = post.type === 'playlist' && post.playlistId;
+        var thumb = isPlaylistItem ? (post.thumbUrl || 'https://i.ytimg.com/vi_webp/default/hqdefault.webp') : 'https://i.ytimg.com/vi/' + (post.idstr || '') + '/hqdefault.jpg';
         var seriesTag =
           post.type === 'playlist'
             ? '<div style="margin-left:auto;font-family:\'DM Mono\',monospace;font-size:10px;color:var(--ink3);display:flex;gap:8px;align-items:center;"><span style="letter-spacing:1px;text-transform:uppercase;">SERIES</span><span>•</span><span style="font-weight:900;letter-spacing:1px;">EPISODES: ' +
@@ -1409,13 +1410,84 @@ async function renderYT() {
         })(post);
         featList.appendChild(item);
       });
-    }
+    /* Async: fetch real titles + playlist thumbnails, update DOM + cache */
+    _fetchYTMeta(cinema).catch(function () {});
   } catch (err) {
     console.error('renderYT error:', err);
     throw err;
   }
 }
 window.renderYT = renderYT;
+
+/* ── Fetch real YouTube titles + playlist thumbnails, patch DOM + cache ── */
+async function _fetchYTMeta(cinema) {
+  if (!cinema || !cinema.length) return;
+
+  var videoIds = cinema
+    .filter(function (p) { return p.idstr && p.type !== 'playlist'; })
+    .map(function (p) { return p.idstr; });
+  var playlists = cinema.filter(function (p) { return p.type === 'playlist' && p.playlistId; });
+
+  var updated = false;
+
+  /* Fetch video titles */
+  if (videoIds.length) {
+    try {
+      var r = await fetch(
+        'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' +
+          videoIds.join(',') + '&key=' + YT_API_KEY,
+      );
+      if (r.ok) {
+        var data = await r.json();
+        (data.items || []).forEach(function (item) {
+          var title = item.snippet && item.snippet.title;
+          if (!title) return;
+          window.S.posts.cinema.forEach(function (p) {
+            if (p.idstr === item.id && p.caption !== title) {
+              p.caption = title;
+              updated = true;
+            }
+          });
+        });
+      }
+    } catch (e) {}
+  }
+
+  /* Fetch playlist thumbnails + titles */
+  if (playlists.length) {
+    try {
+      var plIds = playlists.map(function (p) { return p.playlistId; }).join(',');
+      var pr = await fetch(
+        'https://www.googleapis.com/youtube/v3/playlists?part=snippet&id=' +
+          plIds + '&key=' + YT_API_KEY,
+      );
+      if (pr.ok) {
+        var plData = await pr.json();
+        (plData.items || []).forEach(function (item) {
+          var snippetThumb =
+            item.snippet &&
+            item.snippet.thumbnails &&
+            (item.snippet.thumbnails.high || item.snippet.thumbnails.medium || item.snippet.thumbnails.default);
+          var thumbUrl = snippetThumb ? snippetThumb.url : null;
+          var plTitle = item.snippet && item.snippet.title;
+          window.S.posts.cinema.forEach(function (p) {
+            if (p.playlistId === item.id) {
+              if (thumbUrl && p.thumbUrl !== thumbUrl) { p.thumbUrl = thumbUrl; updated = true; }
+              if (plTitle && p.caption !== plTitle) { p.caption = plTitle; updated = true; }
+            }
+          });
+        });
+      }
+    } catch (e) {}
+  }
+
+  /* Re-render only if something changed, and cache */
+  if (updated) {
+    try { localStorage.setItem('famed0ll_posts', JSON.stringify(window.S.posts)); } catch (e) {}
+    if (typeof renderYT === 'function') renderYT();
+  }
+}
+window._fetchYTMeta = _fetchYTMeta;
 
 async function fetchYTSubCount() {
   var badge = document.getElementById('yt-sub-badge');
