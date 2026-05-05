@@ -464,6 +464,7 @@
 /* ── Session / last-page restore ── */
 !(function () {
   var KEY = 'fd_last_main_page';
+  var VALID_MAIN_PAGES = { profile: 1, scrollables: 1, community: 1, feed: 1, live: 1, shop: 1, music: 1, talk: 1, settings: 1 };
 
   function getActivePage() {
     var active = document.querySelector('.page.active');
@@ -473,7 +474,7 @@
   function saveActivePage(name) {
     try {
       var page = name || getActivePage();
-      if (page) sessionStorage.setItem(KEY, page);
+      if (VALID_MAIN_PAGES[page]) sessionStorage.setItem(KEY, page);
     } catch (e) {}
   }
 
@@ -489,6 +490,7 @@
   function restoreActivePage() {
     try {
       var saved = sessionStorage.getItem(KEY);
+      if (!VALID_MAIN_PAGES[saved]) saved = 'profile';
       var current = getActivePage();
       if (saved && saved !== current && typeof window.showPage === 'function') {
         window.showPage(saved);
@@ -998,6 +1000,6 @@
   if (q && q.length && typeof window.showPage === 'function') {
     var last = q[q.length - 1]; // only navigate to the last requested page
     window._showPageQueue = [];
-    window.showPage(last);
+    window.showPage(VALID_MAIN_PAGES[last] ? last : 'profile');
   }
 })();

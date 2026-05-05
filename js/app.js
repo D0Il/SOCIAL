@@ -13,16 +13,11 @@
    Those live in profile.js, settings.js, live.js, music.js respectively.
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── Boot: load default page and talk page immediately ── */
+/* Boot: load Profile and Talk immediately */
 (function () {
-  var defaultPage = 'profile';
-  try {
-    var saved = localStorage.getItem('fd_last_main_page');
-    if (saved) defaultPage = saved;
-  } catch (e) {}
   if (window._loadPage) {
-    window._loadPage(defaultPage, null);
-    if (defaultPage !== 'talk') window._loadPage('talk', null);
+    window._loadPage('profile', null);
+    window._loadPage('talk', null);
   }
 })();
 
@@ -211,7 +206,12 @@ function hRgb(hex) {
 window.hRgb = hRgb;
 
 /* ── showPage — navigate between pages ── */
+function isKnownMainPage(page) {
+  return ['profile', 'scrollables', 'community', 'feed', 'live', 'shop', 'music', 'talk', 'settings'].indexOf(page) !== -1;
+}
+
 function showPage(page) {
+  page = isKnownMainPage(page) ? page : 'profile';
   /* Lazy-load page HTML on first visit */
   if (window._loadPage) {
     var ph = document.getElementById('page-' + page);
@@ -337,8 +337,31 @@ function showPage(page) {
 (function () {
   var queue = window._showPageQueue || [];
   window.showPage = showPage;
-  // Last call wins — navigate to whatever was requested most recently
-  if (queue.length) showPage(queue[queue.length - 1]);
+
+  function isReloadNavigation() {
+    try {
+      var nav = performance.getEntriesByType && performance.getEntriesByType('navigation');
+      return !!(nav && nav[0] && nav[0].type === 'reload');
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function getSavedMainPage() {
+    try {
+      var saved = localStorage.getItem('fd_last_main_page');
+      return isKnownMainPage(saved) ? saved : '';
+    } catch (e) {
+      return '';
+    }
+  }
+
+  var initialPage = queue.length
+    ? queue[queue.length - 1]
+    : isReloadNavigation()
+      ? getSavedMainPage() || 'profile'
+      : 'profile';
+  showPage(initialPage);
 })();
 
 /* ── Boot: restore state from localStorage and apply settings ── */

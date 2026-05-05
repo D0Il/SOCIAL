@@ -4888,16 +4888,20 @@ body:not(.talk-admin) #nav-addpost-btn {
 }
 @media(min-width:769px) {
   #page-scrollables .tiktok-embed {
-    height: auto !important;
-    min-height: 0 !important;
+    height: 739px !important;
+    min-height: 739px !important;
+    max-height: none !important;
     margin-top: 0 !important;
     margin-bottom: 0 !important;
+    overflow: hidden !important;
   }
 
   #page-scrollables .tiktok-embed iframe {
-    min-height: 0 !important;
-    height: auto !important;
+    display: block !important;
+    min-height: 739px !important;
+    height: 739px !important;
     margin: 0 !important;
+    border: 0 !important;
   }
 }
 /* Desktop profile: make the panties widget more prominent */

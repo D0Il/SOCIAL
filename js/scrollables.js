@@ -214,8 +214,8 @@ window._refreshScrollEmbeds = function () {
         frame.style.minHeight = 'calc(100svh - 118px)';
         frame.style.height = Math.max(560, window.innerHeight - 118) + 'px';
       } else {
-        frame.style.minHeight = '';
-        frame.style.height = '';
+        frame.style.minHeight = '739px';
+        frame.style.height = '739px';
       }
     });
   }
