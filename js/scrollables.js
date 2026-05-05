@@ -205,12 +205,18 @@ window._refreshScrollEmbeds = function () {
   });
 
   function fitFrames() {
+    var isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
     page.querySelectorAll('.tiktok-embed iframe').forEach(function (frame) {
       frame.style.width = '100%';
       frame.style.minWidth = '0';
-      frame.style.minHeight = 'calc(100svh - 118px)';
-      frame.style.height = Math.max(560, window.innerHeight - 118) + 'px';
       frame.style.display = 'block';
+      if (isMobile) {
+        frame.style.minHeight = 'calc(100svh - 118px)';
+        frame.style.height = Math.max(560, window.innerHeight - 118) + 'px';
+      } else {
+        frame.style.minHeight = '';
+        frame.style.height = '';
+      }
     });
   }
 
