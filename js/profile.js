@@ -1847,9 +1847,9 @@ function updateLatestPostWidget(posts) {
     return;
   }
   var latest = list[0];
-  widget.style.display = '';
-  var titleEl = widget.querySelector('.lpw-title');
-  var timeEl = widget.querySelector('.lpw-time');
+  widget.style.display = 'block';
+  var titleEl = document.getElementById('latest-post-text');
+  var timeEl = document.getElementById('latest-post-date');
   if (titleEl)
     titleEl.textContent =
       latest.title || (latest.content && latest.content.slice(0, 60)) || 'Latest post';
