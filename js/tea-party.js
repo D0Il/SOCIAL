@@ -2057,7 +2057,7 @@
           }
         }
         window._fbDb_analytics = i;
-        const n = firebase.storage(),
+        const n = typeof firebase.storage === 'function' ? firebase.storage() : null,
           a = firebase.auth(),
           o = i.collection('site_config').doc('main');
         window._saveSiteConfig =
@@ -2337,6 +2337,7 @@
               id: 'guest',
             })),
           (window._uploadFile = async (e) => {
+            if (!n) throw new Error('Storage unavailable — disable adblocker and reload.');
             var t = 'uploads/' + Date.now() + '_' + e.name.replace(/[^a-zA-Z0-9._-]/g, '_');
             const i = n.ref(t);
             return (await i.put(e), i.getDownloadURL());

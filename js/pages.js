@@ -79,7 +79,6 @@
         break;
 
       case 'settings':
-        if (typeof renderDeletedGrid === 'function') renderDeletedGrid();
         break;
 
       case 'live':

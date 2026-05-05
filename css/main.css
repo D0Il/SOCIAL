@@ -4600,6 +4600,12 @@ body:not(.talk-admin) #nav-analytics-btn.admin-only {
           }
 
 
+/* ── Admin-only dropdown buttons (Restore + Add Post) ── */
+body:not(.talk-admin) #nav-restore-btn,
+body:not(.talk-admin) #nav-addpost-btn {
+  display: none !important
+}
+
 /* ── Scrollables scroll-grid-btn ── */
 #scroll-grid-btn {
             display: none !important
