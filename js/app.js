@@ -468,10 +468,8 @@ function showPage(page) {
         frame.allowTransparency = true;
         frame.style.cssText = 'width:100%;height:100%;border:none;';
         featEmbed.appendChild(frame);
-        if (pinned.desc) {
-          var featDesc = document.getElementById('feat-desc-text');
-          if (featDesc) featDesc.textContent = pinned.desc;
-        }
+        if (window.setFeatureDescText) window.setFeatureDescText(pinned.desc);
+
       }
     }
   } catch (e) {}

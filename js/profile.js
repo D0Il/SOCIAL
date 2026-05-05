@@ -1116,6 +1116,18 @@ function closePinModal(e) {
 }
 window.closePinModal = closePinModal;
 
+
+function setFeatureDescText(text) {
+  var descEl = document.getElementById('feat-desc-text');
+  var descWrap = document.getElementById('feat-desc');
+  var descRow = descWrap && descWrap.parentElement;
+  var clean = String(text || '').trim();
+  var hasText = clean && clean !== '-' && clean !== '—' && clean !== 'â€”';
+  if (descEl) descEl.textContent = hasText ? clean : '';
+  if (descWrap) descWrap.style.display = hasText ? '' : 'none';
+  if (descRow) descRow.style.display = hasText ? '' : 'none';
+}
+window.setFeatureDescText = setFeatureDescText;
 function clearPin() {
   window.S.pinned = null;
   try {
@@ -1126,8 +1138,7 @@ function clearPin() {
   if (frame)
     frame.src =
       'https://www.youtube-nocookie.com/embed/videoseries?list=PLhRgPfuqZrXNrd24d6fXO0ZKhWFm922oM&autoplay=0';
-  var descEl = document.getElementById('feat-desc-text');
-  if (descEl) descEl.textContent = '—';
+  setFeatureDescText('');
   closePinModal();
 }
 window.clearPin = clearPin;
@@ -1213,8 +1224,8 @@ function submitPin() {
   var desc = document.getElementById('pin-desc');
   var descText = desc ? desc.value.trim() : '';
   if (descText) {
-    var descEl = document.getElementById('feat-desc-text');
-    if (descEl) descEl.textContent = descText;
+    setFeatureDescText(descText);
+
   }
   window.S.pinned = { embedUrl: embedUrl, desc: descText || '' };
   try {
@@ -1373,8 +1384,8 @@ async function renderYT() {
           frame.style.cssText = 'width:100%;height:100%;border:none;';
           feat.appendChild(frame);
         }
-        var descEl = document.getElementById('feat-desc-text');
-        if (descEl) descEl.textContent = title;
+        setFeatureDescText(title);
+
       };
       container.appendChild(item);
       return item;
@@ -1443,8 +1454,8 @@ async function renderYT() {
               frame.style.cssText = 'width:100%;height:100%;border:none;';
               feat.appendChild(frame);
             }
-            var descEl = document.getElementById('feat-desc-text');
-            if (descEl) descEl.textContent = p.caption || 'YouTube Video';
+            setFeatureDescText(p.caption || 'YouTube Video');
+
           };
         })(post);
         featList.appendChild(item);

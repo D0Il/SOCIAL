@@ -173,8 +173,7 @@
         try {
           var featFrame = document.querySelector('#feat-embed iframe');
           if (featFrame && data.pinned.embedUrl) featFrame.src = data.pinned.embedUrl;
-          var descEl = document.getElementById('feat-desc-text');
-          if (descEl) descEl.textContent = data.pinned.desc || '—';
+          if (window.setFeatureDescText) window.setFeatureDescText(data.pinned.desc || '');
         } catch (e) {}
       }
 

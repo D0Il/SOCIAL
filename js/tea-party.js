@@ -2155,8 +2155,7 @@
               try {
                 const d = document.querySelector('#feat-embed iframe');
                 d && e.pinned.embedUrl && (d.src = e.pinned.embedUrl);
-                const c = document.getElementById('feat-desc-text');
-                c && (c.textContent = e.pinned.desc || '—');
+                window.setFeatureDescText && window.setFeatureDescText(e.pinned.desc || '');
               } catch (e) {}
             if (void 0 !== e.live_description) _renderLiveDesc(e.live_description);
             if (Array.isArray(e.insta_trash)) {
