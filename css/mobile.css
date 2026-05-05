@@ -1674,3 +1674,20 @@ html,body{overscroll-behavior-x:none}
               }
 
 }
+/* Scrollables mobile embed height refresh */
+@media(max-width:768px) {
+  body.mob-scroll-mode #page-scrollables .tiktok-embed {
+    min-height: calc(100svh - 118px) !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body.mob-scroll-mode #page-scrollables .tiktok-embed iframe {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: calc(100svh - 118px) !important;
+    height: calc(100svh - 118px) !important;
+    border: 0 !important;
+  }
+}

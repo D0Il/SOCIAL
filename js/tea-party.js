@@ -1380,11 +1380,12 @@
           .map((e) => {
             var { nickname: t, avatar: i } = re(e.username),
               n = dayjs(e.created_at).format('MMM D'),
-              a = (e.content || '').replace(/<[^>]*>/g, '').substring(0, 30);
+              o = e.content || e.body || e.text || '',
+              a = o.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().substring(0, 120);
             return `
       <div class="blog-sidebar-item">
         <a class="blog-sidebar-title" onclick="window.switchToBlog('${e.id}')">${he(e.title)}</a>
-        <div class="blog-sidebar-preview">${he(a)}${30 < e.content.length ? '...' : ''}</div>
+        <div class="blog-sidebar-preview">${he(a)}${120 < o.length ? '...' : ''}</div>
         <div class="blog-sidebar-meta">
           <div class="blog-meta-avatar" style="background-image:url('${i}')"></div>
           <span>${X('by')} ${he(t)} ${X('on')} ${n}</span>

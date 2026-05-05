@@ -1850,9 +1850,25 @@ function updateLatestPostWidget(posts) {
   widget.style.display = 'block';
   var titleEl = document.getElementById('latest-post-text');
   var timeEl = document.getElementById('latest-post-date');
-  if (titleEl)
-    titleEl.textContent =
-      latest.title || (latest.content && latest.content.slice(0, 60)) || 'Latest post';
+  var latestTitle = (latest.title || 'Latest post').trim();
+  var latestText = (latest.content || latest.body || latest.text || '')
+    .replace(/<[^>]*>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (titleEl) {
+    titleEl.innerHTML = '';
+    titleEl.style.display = 'block';
+    titleEl.style.webkitLineClamp = '';
+    titleEl.style.webkitBoxOrient = '';
+    var titleLine = document.createElement('div');
+    titleLine.textContent = latestTitle;
+    titleLine.style.cssText = "font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--ink);font-weight:700;line-height:1.3;margin-bottom:4px;";
+    var textLine = document.createElement('div');
+    textLine.textContent = latestText || 'No preview text yet.';
+    textLine.style.cssText = "font-family:'Cormorant Garamond',serif;font-size:13px;line-height:1.45;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;";
+    titleEl.appendChild(titleLine);
+    titleEl.appendChild(textLine);
+  }
   if (timeEl)
     timeEl.textContent = latest.created_at ? new Date(latest.created_at).toLocaleDateString() : '';
 }
