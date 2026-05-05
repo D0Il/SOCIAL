@@ -1,0 +1,185 @@
+<div class=page id=page-scrollables style=background:#fff>
+        <div style=display:none;position:fixed;inset:0;z-index:450;background:rgba(0,0,0,.6);backdrop-filter:blur(4px) id=scroll-grid-overlay
+          onclick="event.target===this&&closeScrollGrid()">
+          <button onclick=closeScrollGrid() aria-label="Close grid" style="position:fixed;top:14px;right:14px;z-index:460;background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.06);color:var(--ink);width:40px;height:40px;border-radius:8px;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center">×</button>
+          <div style="position:absolute;top:54px;right:0;bottom:64px;width:min(100%,340px);background:var(--s1);display:flex;flex-direction:column;overflow:hidden;border-left:1px solid var(--border)">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--s2)">
+              <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink)">All Videos</span>
+              <button onclick=closeScrollGrid() style="background:0 0;border:none;color:var(--ink3);font-size:18px;cursor:pointer;padding:0;line-height:1">×</button>
+            </div>
+            <div style=flex:1;overflow-y:auto;padding:12px id=scroll-grid-popup-content></div>
+          </div>
+        </div>
+
+        <!-- floating grid button (moved to float over content/video) -->
+        <button onclick=toggleScrollGrid() title="Grid view" id=scroll-grid-btn style="position:fixed;bottom:120px;right:12px;top:auto;z-index:500;background:var(--s1);border:1px solid var(--border2);border-radius:10px;color:var(--ink2);font-size:16px;width:46px;height:46px;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.45)">
+  <svg viewBox="0 0 24 24" height=20 width=20 fill=none stroke=currentColor stroke-width=1.8><rect height=7 width=7 x=3 y=3 rx=1 /><rect height=7 width=7 x=14 y=3 rx=1 /><rect height=7 width=7 x=3 y=14 rx=1 /><rect height=7 width=7 x=14 y=14 rx=1 /></svg>
+</button>
+        <div class=scrollables-layout>
+          <aside class=scrollables-left-panel aria-hidden=false>
+            <div class=scroll-thumb-grid id=scroll-thumb-grid aria-live=polite role=list></div>
+          </aside>
+          <div class=scrollables-right>
+            <div class=feed-wrap style=max-width:680px;padding:0>
+              <div style=padding:0>
+                <div class=tiktok-grid id=scrollables-grid style=grid-template-columns:1fr;gap:0>
+                  <blockquote cite=https://www.tiktok.com/@famed0ll/video/7036844890826820870 class=tiktok-embed data-video-id=7036844890826820870
+                    style=max-width:605px;min-width:325px>
+                    <section><a href="https://www.tiktok.com/@famed0ll?refer=embed" target=_blank title=@famed0ll>@famed0ll</a>
+                      <p>top 0.001 of sza fans</p><a href="https://www.tiktok.com/music/original-sound-7027862840988011269?refer=embed"
+                        target=_blank title="♬ original sound - zariah 🦋">♬ original sound - zariah 🦋</a></section>
+                  </blockquote>
+                  <blockquote cite=https://www.tiktok.com/@famed0ll/video/7015650960622095622 class=tiktok-embed data-video-id=7015650960622095622
+                    style=max-width:605px;min-width:325px>
+                    <section><a href="https://www.tiktok.com/@famed0ll?refer=embed" target=_blank title=@famed0ll>@famed0ll</a> @melinesssa
+                      <a href="https://www.tiktok.com/music/Rock-With-It-by-Saucy-Santana-6985806763622812421?refer=embed"
+                        target=_blank title="♬ Rock With It by Saucy Santana - Saucy Santana">♬ Rock With It by Saucy Santana - Saucy Santana</a></section>
+                  </blockquote>
+                  <blockquote cite=https://www.tiktok.com/@famed0ll/video/6998363375063289094 class=tiktok-embed data-video-id=6998363375063289094
+                    style=max-width:605px;min-width:325px>
+                    <section><a href="https://www.tiktok.com/@famed0ll?refer=embed" target=_blank title=@famed0ll>@famed0ll</a>
+                      <p>i forget that self awareness is rare sometimes</p><a href="https://www.tiktok.com/music/OMG-THIS-SOUND-GO-VIRAL-6993401275006094086?refer=embed"
+                        target=_blank title="♬ OMG THIS SOUND GO VIRAL - Jascra - 🫧">♬ OMG THIS SOUND GO VIRAL - Jascra - 🫧</a></section>
+                  </blockquote>
+                  <blockquote cite=https://www.tiktok.com/@famed0ll/video/6947466359869623557 class=tiktok-embed data-video-id=6947466359869623557
+                    style=max-width:605px;min-width:325px>
+                    <section><a href="https://www.tiktok.com/@famed0ll?refer=embed" target=_blank title=@famed0ll>@famed0ll</a>
+                      <p>didn't think that one through did i</p><a href="https://www.tiktok.com/music/Cigarette-Duet-6674093649321609990?refer=embed"
+                        target=_blank title="♬ Cigarette Duet - Princess Chelsea">♬ Cigarette Duet - Princess Chelsea</a></section>
+                  </blockquote>
+                  <blockquote cite=https://www.tiktok.com/@.do.ll/video/6943317731785673990 class=tiktok-embed data-video-id=6943317731785673990
+                    style=max-width:605px;min-width:325px>
+                    <section><a href="https://www.tiktok.com/@.do.ll?refer=embed" target=_blank title=@.do.ll>@.do.ll</a>
+                      <p></p><a href="https://www.tiktok.com/music/Not-this-sound-really-going-viral-TF-6937062979963800325?refer=embed"
+                        target=_blank title="♬ Not this sound really going viral TF - pretty ⋆.˚🦋༘⋆">♬ Not this sound really going viral TF - pretty ⋆.˚🦋༘⋆</a></section>
+                  </blockquote>
+                  <blockquote cite=https://www.tiktok.com/@famed0ll/video/6893232099839479042 class=tiktok-embed data-video-id=6893232099839479042
+                    style=max-width:605px;min-width:325px>
+                    <section><a href="https://www.tiktok.com/@famed0ll?refer=embed" target=_blank title=@famed0ll>@famed0ll</a>
+                      <p>grade 3 talent show song right there</p><a href="https://www.tiktok.com/music/Pink-Fluffy-Unicorns-Dancing-On-Rainbows-6790006358054799362?refer=embed"
+                        target=_blank title="♬ Pink Fluffy Unicorns Dancing On Rainbows - Songs To Wear Pants To">♬ Pink Fluffy Unicorns Dancing On Rainbows - Songs To Wear Pants To</a></section>
+                  </blockquote>
+                  <blockquote cite=https://www.tiktok.com/@famed0ll/video/6888033257493925122 class=tiktok-embed data-video-id=6888033257493925122
+                    style=max-width:605px;min-width:325px>
+                    <section><a href="https://www.tiktok.com/@famed0ll?refer=embed" target=_blank title=@famed0ll>@famed0ll</a>
+                      <p>not relatable anymore just thought was funny</p><a href="https://www.tiktok.com/?refer=embed" target=_blank
+                        title="♬ ">♬</a></section>
+                  </blockquote>
+                  <blockquote cite=https://www.tiktok.com/@.do.ll/video/6850616459123494149 class=tiktok-embed data-video-id=6850616459123494149
+                    style=max-width:605px;min-width:325px>
+                    <section><a href="https://www.tiktok.com/@.do.ll?refer=embed" target=_blank title=@.do.ll>@.do.ll</a>
+                      <p></p><a href="https://www.tiktok.com/music/original-sound-6842497935612087046?refer=embed" target=_blank
+                        title="♬ original sound - Jean-Victor">♬ original sound - Jean-Victor</a></section>
+                  </blockquote>
+                  <blockquote cite=https://www.tiktok.com/@famed0ll/video/6794151654754209029 class=tiktok-embed data-video-id=6794151654754209029
+                    style=max-width:605px;min-width:325px>
+                    <section><a href="https://www.tiktok.com/@famed0ll?refer=embed" target=_blank title=@famed0ll>@famed0ll</a>
+                      <p>I laughed at this for 10 minutes straght</p><a href="https://www.tiktok.com/music/original-sound-6793569073692248837?refer=embed"
+                        target=_blank title="♬ original sound - Fame Doll">♬ original sound - Fame Doll</a></section>
+                  </blockquote>
+                  <blockquote cite=https://www.tiktok.com/@famed0ll/video/6786469909070204165 class=tiktok-embed data-video-id=6786469909070204165
+                    style=max-width:605px;min-width:325px>
+                    <section><a href="https://www.tiktok.com/@famed0ll?refer=embed" target=_blank title=@famed0ll>@famed0ll</a>
+                      <p>ill be going live after exams because we hit 100k 🥰</p><a href="https://www.tiktok.com/music/original-sound-6786402614255864582?refer=embed"
+                        target=_blank title="♬ original sound - aezahbrown">♬ original sound - aezahbrown</a></section>
+                  </blockquote>
+                  <blockquote cite=https://www.tiktok.com/@famed0ll/video/6755260893124168966 class=tiktok-embed data-video-id=6755260893124168966
+                    style=max-width:605px;min-width:325px>
+                    <section><a href="https://www.tiktok.com/@famed0ll?refer=embed" target=_blank title=@famed0ll>@famed0ll</a>
+                      <p>Every. Single. Day.</p><a href="https://www.tiktok.com/music/som-original-7211194554317867782?refer=embed"
+                        target=_blank title="♬ som original - fimlscoven">♬ som original - fimlscoven</a></section>
+                  </blockquote>
+                  <blockquote cite=https://www.tiktok.com/@famed0ll/video/6735870249545125125 class=tiktok-embed data-video-id=6735870249545125125
+                    style=max-width:605px;min-width:325px>
+                    <section><a href="https://www.tiktok.com/@famed0ll?refer=embed" target=_blank title=@famed0ll>@famed0ll</a>
+                      <p>thank you for coming to my ted talk</p><a href="https://www.tiktok.com/music/dont-play-w-me-pERIOD-6735865911296690950?refer=embed"
+                        target=_blank title="♬ dont play w me pERIOD - Fame Doll">♬ dont play w me pERIOD - Fame Doll</a></section>
+                  </blockquote>
+                  <script src=https://www.tiktok.com/embed.js async></script>
+                  <script>
+                    ! function() {
+                      const t = document.getElementById("scrollables-grid");
+                      if (t) {
+                        const o = Array.from(t.querySelectorAll(".tiktok-embed"));
+                        if (!(o.length < 2)) {
+                          const e = o.slice().sort((e, t) => (parseInt(t.dataset.videoId || "0", 10) || 0) - (parseInt(
+                            e.dataset.videoId || "0", 10) || 0));
+                          e.some((e, t) => e !== o[t]) && e.forEach(e => t.appendChild(e))
+                        }
+                      }
+                    }()
+                  </script>
+                  <script>
+                    ! function() {
+                      const d = document.getElementById("scroll-thumb-grid"),
+                        m = document.getElementById("scrollables-grid");
+                      d && m && setTimeout(async () => {
+                        const e = Array.from(m.querySelectorAll(".tiktok-embed"));
+                        var t = e.map(e => {
+                          const t = e.getAttribute("cite") || "",
+                            n = e.querySelector("section p");
+                          var o = n ? n.textContent.trim() : "";
+                          const r = e.querySelector("section a");
+                          var a = r ? r.textContent.replace(/^@/, "") : "",
+                            e = e.dataset.videoId || t.split("/").filter(Boolean).pop() || "";
+                          return {
+                            url: t,
+                            caption: o,
+                            user: a,
+                            vid: e
+                          }
+                        }).filter(e => e.url);
+                        for (const o of t) {
+                          const r = document.createElement("a");
+                          r.className = "scroll-thumb", r.href = o.url, r.target = "_blank", r.rel =
+                            "noopener noreferrer", r.setAttribute("role", "listitem");
+                          const a = document.createElement("img");
+                          a.alt = o.caption || o.user || "TikTok", a.loading = "lazy";
+                          const c = document.createElement("div");
+                          c.className = "st-overlay";
+                          const s = document.createElement("div");
+                          s.className = "st-user", s.textContent = o.user || "";
+                          const l = document.createElement("div");
+                          l.className = "st-play", l.textContent = "Open", c.appendChild(s), c.appendChild(l), r.appendChild(
+                            a), r.appendChild(c);
+                          var n = `https://p16-sign-va.tiktokcdn.com/obj/tos-useast5-p-0037/${o.vid}.webp`;
+                          a.src = n, (async () => {
+                            var e = await async function(e) {
+                              try {
+                                var t = `https://www.tiktok.com/oembed?url=${encodeURIComponent(e)}`;
+                                const o = await fetch(t, {
+                                  cache: "force-cache"
+                                });
+                                if (!o.ok) throw new Error("no oembed");
+                                var n = await o.json();
+                                if (n && n.thumbnail_url) return n.thumbnail_url
+                              } catch (e) {}
+                              return null
+                            }(o.url);
+                            e && a.src !== e && (a.src = e)
+                          })(), a.addEventListener("error", () => {
+                            const e = document.createElement("div");
+                            e.style.cssText =
+                              "width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.00));color:var(--ink3);font-family:DM Mono,monospace;font-size:12px;",
+                              e.textContent = o.user ? o.user.slice(0, 2).toUpperCase() : "TK", a.remove(), r.insertBefore(
+                                e, c)
+                          }), r.addEventListener("click", () => {
+                            r.classList.add("clicked"), setTimeout(() => r.classList.remove("clicked"), 400)
+                          }), d.appendChild(r)
+                        }
+                        if (0 === t.length) {
+                          const i = document.createElement("div");
+                          i.style.cssText =
+                            "color:var(--ink3);font-family:DM Mono,monospace;font-size:12px;padding:8px;", i.textContent =
+                            "No scrollables found — add TikTok links on the right to populate thumbnails.", d.appendChild(
+                              i)
+                        }
+                      }, 180)
+                    }()
+                  </script>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>

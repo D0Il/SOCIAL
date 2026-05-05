@@ -1,0 +1,50 @@
+<div class=page id=page-live>
+  <div class=live-wrap>
+    <div class=live-header>
+      <div class=live-header-left>
+        <div class=live-dot></div>
+        <div class=live-badge>Live</div>
+        <div class=live-header-info>
+          <div class=live-title>FAME DOLL</div>
+        </div>
+      </div>
+      <div class=live-header-right>
+        <div class=live-viewer-count id=live-viewer-count style=display:none>— watching</div><a href=https://www.twitch.tv/famedoll target=_blank class=live-twitch-link>Open on Twitch ↗</a>
+      </div>
+    </div>
+    <div class=live-content>
+      <div class=live-left>
+        <div class=live-player id=twitch-video>
+          <div class=live-offline>
+            <div class=live-offline-avatar><img src=https://i.imgur.com/ct2ERKN.jpeg alt="Fame Doll"></div>
+            <div class=live-offline-title>Not Live Right Now</div>
+            <div class=live-offline-sub>Follow on Twitch to get notified<br>when the show starts.</div>
+            <a href=https://www.twitch.tv/famedoll target=_blank class=live-offline-follow>Follow · twitch.tv/famedoll</a>
+          </div>
+        </div>
+        <div class=live-desc id=live-desc-block>
+          <button onclick=openLiveDescEdit() class="live-desc-edit-btn talk-admin-only" title="Edit description">···</button>
+          <div class=live-desc-inner>
+            <div class=live-desc-content id=live-desc-content><span class="live-desc-empty talk-admin-only" id=live-desc-placeholder>Add a description...</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class=live-chat-panel>
+      <div class=live-chat-header>Live Chat</div>
+      <div class=live-chat-body>
+        <div style=height:100%;min-height:200px id=twitch-chat-container-live></div>
+      </div>
+    </div>
+  </div>
+  <div class=live-desc-modal-overlay id=live-desc-modal-overlay style="display:none">
+    <div class=live-desc-modal>
+      <div class=live-desc-modal-head><span class=live-desc-modal-title>Edit Stream Description</span> <button onclick=closeLiveDescEdit() class=live-desc-modal-close>×</button></div>
+      <div class=live-desc-toolbar><button onclick='liveDescExec("bold")' class=live-desc-tb-btn title=Bold><b>B</b></button> <button onclick='liveDescExec("italic")' class=live-desc-tb-btn title=Italic><i>I</i></button> <button onclick=liveDescLink() class=live-desc-tb-btn title=Link>Link</button>
+        <div class=live-desc-tb-sep></div><button onclick=liveDescAddPhoto() class=live-desc-tb-btn title="Upload photo">+ Photo</button>
+      </div>
+      <div class=live-desc-editor id=live-desc-editor contenteditable=true spellcheck=true></div>
+      <div class=live-desc-modal-foot><button onclick=closeLiveDescEdit() class=live-desc-cancel-btn>Cancel</button> <button onclick=saveLiveDesc() class=live-desc-save-btn>Save</button></div>
+    </div>
+  </div>
+</div>
