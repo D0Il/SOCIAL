@@ -207,7 +207,9 @@ window.hRgb = hRgb;
 
 /* ── showPage — navigate between pages ── */
 function isKnownMainPage(page) {
-  return ['profile', 'scrollables', 'community', 'feed', 'live', 'shop', 'music', 'talk', 'settings'].indexOf(page) !== -1;
+  return window.FD_STATE
+    ? window.FD_STATE.isMainPage(page)
+    : ['profile', 'scrollables', 'community', 'feed', 'live', 'shop', 'music', 'talk', 'settings'].indexOf(page) !== -1;
 }
 
 function showPage(page) {
@@ -349,7 +351,9 @@ function showPage(page) {
 
   function getSavedMainPage() {
     try {
-      var saved = localStorage.getItem('fd_last_main_page');
+      var saved = window.FD_STATE
+        ? window.FD_STATE.getText('fd_last_main_page', '')
+        : localStorage.getItem('fd_last_main_page');
       return isKnownMainPage(saved) ? saved : '';
     } catch (e) {
       return '';
@@ -497,3 +501,4 @@ function showPage(page) {
     }
   } catch (e) {}
 })();
+

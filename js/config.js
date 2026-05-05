@@ -104,17 +104,17 @@ var DROPS = [];
 var STREAM_LINKS = [];
 var _eraPhotos = {};
           try {
-            ERAS = JSON.parse(localStorage.getItem("fd_eras") || "{}")
-          } catch (e) {}
+  ERAS = window.FD_STATE ? window.FD_STATE.getJSON('fd_eras', {}) : JSON.parse(localStorage.getItem('fd_eras') || '{}');
+} catch (e) {}
           try {
-            DROPS = JSON.parse(localStorage.getItem("fd_drops") || "[]")
-          } catch (e) {}
+  DROPS = window.FD_STATE ? window.FD_STATE.getJSON('fd_drops', []) : JSON.parse(localStorage.getItem('fd_drops') || '[]');
+} catch (e) {}
           try {
-            STREAM_LINKS = JSON.parse(localStorage.getItem("fd_streams") || "null")
-          } catch (e) {}
+  STREAM_LINKS = window.FD_STATE ? window.FD_STATE.getJSON('fd_streams', null) : JSON.parse(localStorage.getItem('fd_streams') || 'null');
+} catch (e) {}
           try {
-            _eraPhotos = JSON.parse(localStorage.getItem("fd_era_photos") || "{}")
-          } catch (e) {}
+  _eraPhotos = window.FD_STATE ? window.FD_STATE.getJSON('fd_era_photos', {}) : JSON.parse(localStorage.getItem('fd_era_photos') || '{}');
+} catch (e) {}
 
 
 // ── showPage stub (sync) ──────────────────────────────────────────────────
@@ -129,3 +129,4 @@ window.showPage = function(page) {
 window.openExternalLink = window.openExternalLink || function(url) {
   if (url) window.open(url, '_blank', 'noopener');
 };
+

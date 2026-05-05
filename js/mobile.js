@@ -1003,3 +1003,4 @@
     window.showPage(VALID_MAIN_PAGES[last] ? last : 'profile');
   }
 })();
+

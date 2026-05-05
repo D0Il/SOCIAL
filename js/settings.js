@@ -279,3 +279,4 @@ window.removeCustomBg = removeCustomBg;
     _applyCustomBgUI(s.customBg);
   }
 })();
+

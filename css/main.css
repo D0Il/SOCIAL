@@ -4929,3 +4929,36 @@ body:not(.talk-admin) #nav-addpost-btn {
     height: 156px !important;
   }
 }
+/* Shared page loading state */
+.page-loading {
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-loader {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--s1);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .24);
+}
+
+.page-loader span {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ink3);
+  border-top-color: var(--pk);
+  border-radius: 50%;
+  animation: page-loader-spin .75s linear infinite;
+}
+
+@keyframes page-loader-spin {
+  to { transform: rotate(360deg); }
+}
+

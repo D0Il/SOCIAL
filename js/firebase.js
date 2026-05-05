@@ -269,3 +269,4 @@
     console.warn('[firebase.js] Initialization failed:', err);
   }
 })();
+

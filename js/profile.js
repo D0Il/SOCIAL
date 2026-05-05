@@ -1117,12 +1117,31 @@ function closePinModal(e) {
 window.closePinModal = closePinModal;
 
 
+function initProfileBioVisibility() {
+  var bio = document.getElementById('sl-bio');
+  var block = bio && bio.closest('.sl-bio-block');
+  if (!bio || !block || block._bioVisibilityReady) return;
+  block._bioVisibilityReady = true;
+
+  function sync() {
+    var text = (bio.textContent || '').trim();
+    block.style.display = text && text !== '...' ? '' : 'none';
+  }
+
+  sync();
+  new MutationObserver(sync).observe(bio, {
+    childList: true,
+    characterData: true,
+    subtree: true,
+  });
+}
+window.initProfileBioVisibility = initProfileBioVisibility;
 function setFeatureDescText(text) {
   var descEl = document.getElementById('feat-desc-text');
   var descWrap = document.getElementById('feat-desc');
   var descRow = descWrap && descWrap.parentElement;
   var clean = String(text || '').trim();
-  var hasText = clean && clean !== '-' && clean !== '—' && clean !== 'â€”';
+  var hasText = clean && clean !== '-' && clean !== '—' && clean !== '—';
   if (descEl) descEl.textContent = hasText ? clean : '';
   if (descWrap) descWrap.style.display = hasText ? '' : 'none';
   if (descRow) descRow.style.display = hasText ? '' : 'none';
@@ -1907,3 +1926,4 @@ setTimeout(function () {
   applyAllCrops();
   wireInstaClickCrop();
 })();
+

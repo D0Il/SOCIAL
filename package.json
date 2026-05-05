@@ -1,0 +1,13 @@
+{
+  "name": "famedoll-social-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "format": "node scripts/format.mjs",
+    "lint": "node scripts/lint.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "check": "npm run format -- --check && npm run lint && npm run smoke"
+  }
+}
+

@@ -95,91 +95,10 @@
                       <p>thank you for coming to my ted talk</p><a href="https://www.tiktok.com/music/dont-play-w-me-pERIOD-6735865911296690950?refer=embed"
                         target=_blank title="♬ dont play w me pERIOD - Fame Doll">♬ dont play w me pERIOD - Fame Doll</a></section>
                   </blockquote>
-                  <script src=https://www.tiktok.com/embed.js async></script>
-                  <script>
-                    ! function() {
-                      const t = document.getElementById("scrollables-grid");
-                      if (t) {
-                        const o = Array.from(t.querySelectorAll(".tiktok-embed"));
-                        if (!(o.length < 2)) {
-                          const e = o.slice().sort((e, t) => (parseInt(t.dataset.videoId || "0", 10) || 0) - (parseInt(
-                            e.dataset.videoId || "0", 10) || 0));
-                          e.some((e, t) => e !== o[t]) && e.forEach(e => t.appendChild(e))
-                        }
-                      }
-                    }()
-                  </script>
-                  <script>
-                    ! function() {
-                      const d = document.getElementById("scroll-thumb-grid"),
-                        m = document.getElementById("scrollables-grid");
-                      d && m && setTimeout(async () => {
-                        const e = Array.from(m.querySelectorAll(".tiktok-embed"));
-                        var t = e.map(e => {
-                          const t = e.getAttribute("cite") || "",
-                            n = e.querySelector("section p");
-                          var o = n ? n.textContent.trim() : "";
-                          const r = e.querySelector("section a");
-                          var a = r ? r.textContent.replace(/^@/, "") : "",
-                            e = e.dataset.videoId || t.split("/").filter(Boolean).pop() || "";
-                          return {
-                            url: t,
-                            caption: o,
-                            user: a,
-                            vid: e
-                          }
-                        }).filter(e => e.url);
-                        for (const o of t) {
-                          const r = document.createElement("a");
-                          r.className = "scroll-thumb", r.href = o.url, r.target = "_blank", r.rel =
-                            "noopener noreferrer", r.setAttribute("role", "listitem");
-                          const a = document.createElement("img");
-                          a.alt = o.caption || o.user || "TikTok", a.loading = "lazy";
-                          const c = document.createElement("div");
-                          c.className = "st-overlay";
-                          const s = document.createElement("div");
-                          s.className = "st-user", s.textContent = o.user || "";
-                          const l = document.createElement("div");
-                          l.className = "st-play", l.textContent = "Open", c.appendChild(s), c.appendChild(l), r.appendChild(
-                            a), r.appendChild(c);
-                          var n = `https://p16-sign-va.tiktokcdn.com/obj/tos-useast5-p-0037/${o.vid}.webp`;
-                          a.src = n, (async () => {
-                            var e = await async function(e) {
-                              try {
-                                var t = `https://www.tiktok.com/oembed?url=${encodeURIComponent(e)}`;
-                                const o = await fetch(t, {
-                                  cache: "force-cache"
-                                });
-                                if (!o.ok) throw new Error("no oembed");
-                                var n = await o.json();
-                                if (n && n.thumbnail_url) return n.thumbnail_url
-                              } catch (e) {}
-                              return null
-                            }(o.url);
-                            e && a.src !== e && (a.src = e)
-                          })(), a.addEventListener("error", () => {
-                            const e = document.createElement("div");
-                            e.style.cssText =
-                              "width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.00));color:var(--ink3);font-family:DM Mono,monospace;font-size:12px;",
-                              e.textContent = o.user ? o.user.slice(0, 2).toUpperCase() : "TK", a.remove(), r.insertBefore(
-                                e, c)
-                          }), r.addEventListener("click", () => {
-                            r.classList.add("clicked"), setTimeout(() => r.classList.remove("clicked"), 400)
-                          }), d.appendChild(r)
-                        }
-                        if (0 === t.length) {
-                          const i = document.createElement("div");
-                          i.style.cssText =
-                            "color:var(--ink3);font-family:DM Mono,monospace;font-size:12px;padding:8px;", i.textContent =
-                            "No scrollables found — add TikTok links on the right to populate thumbnails.", d.appendChild(
-                              i)
-                        }
-                      }, 180)
-                    }()
-                  </script>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+

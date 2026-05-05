@@ -69,6 +69,8 @@
           }, 100);
         }
 
+        if (typeof initProfileBioVisibility === 'function') initProfileBioVisibility();
+
         if (typeof updateLatestPostWidget === 'function') {
           updateLatestPostWidget(window._cachedBlogPosts || null);
         }
@@ -140,3 +142,4 @@
     } catch (e) {}
   });
 })();
+

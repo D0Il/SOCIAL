@@ -1045,7 +1045,7 @@
                 }
 
                 /* Make the "TAKE OFF MY CLOTHES" button slightly bigger on mobile and shift it a bit left to center */
-                
+
 
               @media(max-width:768px) {
                 #page-scrollables {
@@ -1691,3 +1691,4 @@ html,body{overscroll-behavior-x:none}
     border: 0 !important;
   }
 }
+

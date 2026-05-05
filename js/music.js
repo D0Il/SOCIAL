@@ -360,3 +360,4 @@
   setTimeout(syncMusicSidebar, 200);
   renderAll();
 })();
+

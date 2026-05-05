@@ -57,6 +57,13 @@ window._onResize = function(fn) {
 // cb(wasLoaded: boolean) fires when done.
 window._pageCache  = {};
 window._onPageLoad = null; // hook: pages.js sets this
+function _setPageLoading(el, isLoading) {
+  if (!el) return;
+  el.classList.toggle('page-loading', !!isLoading);
+  if (isLoading && !el.innerHTML.trim()) {
+    el.innerHTML = '<div class=page-loader aria-live=polite><span></span></div>';
+  }
+}
 
 window._loadPage = function(pageName, cb) {
   var ph = document.getElementById('page-' + pageName);
@@ -65,6 +72,7 @@ window._loadPage = function(pageName, cb) {
     return;
   }
   ph.dataset.loaded = '1';
+  _setPageLoading(ph, true);
   fetch(ph.dataset.pageSrc)
     .then(function(r) { return r.text(); })
     .then(function(html) {
@@ -86,11 +94,13 @@ window._loadPage = function(pageName, cb) {
           old.parentNode && old.parentNode.removeChild(old);
         });
       }
+      _setPageLoading(ph, false);
       window._pageCache[pageName] = true;
       try { if (window._onPageLoad) window._onPageLoad(pageName); } catch(e) {}
       if (cb) cb(true);
     })
     .catch(function() {
+      _setPageLoading(ph, false);
       ph.dataset.loaded = '';  // allow retry
       if (cb) cb(false);
     });
@@ -99,3 +109,4 @@ window._loadPage = function(pageName, cb) {
 window._prefetchPage = function(pageName) {
   window._loadPage(pageName, null);
 };
+

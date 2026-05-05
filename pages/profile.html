@@ -72,22 +72,6 @@
       class=sl-bio-block><span class=sl-bio-label></span>
       <div class=sl-bio-text id=sl-bio>...</div>
       </div>
-      <script>
-        ! function() {
-          const e = document.getElementById("sl-bio"),
-            n = e && e.closest(".sl-bio-block");
-
-          function t() {
-            var t = (e.textContent || "").trim();
-            n.style.display = t && "..." !== t ? "" : "none"
-          }
-          e && n && (t(), new MutationObserver(t).observe(e, {
-            childList: !0,
-            characterData: !0,
-            subtree: !0
-          }))
-        }()
-      </script>
       </aside>
       <main class=col-center>
         <div class=feat-block>
@@ -305,3 +289,4 @@
       </main>
       </div>
       </div>
+
